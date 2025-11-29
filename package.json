@@ -1,7 +1,7 @@
 {
   "name": "root-forest-api",
-  "version": "1.0.0",
-  "description": "API Server for Root Forest - Natural Protein Powder",
+  "version": "2.0.0",
+  "description": "API Server for Root Forest - Natural Protein Powder with Neon PostgreSQL",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -13,14 +13,18 @@
     "protein",
     "algeria",
     "api",
-    "e-commerce"
+    "e-commerce",
+    "neon",
+    "postgresql"
   ],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
     "cors": "^2.8.5",
-    "body-parser": "^1.20.2"
+    "body-parser": "^1.20.2",
+    "pg": "^8.11.0",
+    "dotenv": "^16.3.1"
   },
   "devDependencies": {},
   "engines": {
@@ -29,10 +33,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "your-repo-url"
+    "url": "https://github.com/anismig3/oanis"
   },
   "bugs": {
-    "url": "your-repo-url/issues"
+    "url": "https://github.com/anismig3/oanis/issues"
   },
-  "homepage": "your-website-url"
+  "homepage": "https://github.com/anismig3/oanis"
 }

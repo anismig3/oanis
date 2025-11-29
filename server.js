@@ -1,21 +1,23 @@
 #!/usr/bin/env node
 
 /**
- * خادم API بسيط لـ Root Forest
- * استخدم هذا الملف كنقطة بداية لإنشاء خادم API خاص بك
+ * خادم API لـ Root Forest مع قاعدة بيانات Neon PostgreSQL
  * 
  * التثبيت:
- * npm install express cors body-parser
+ * npm install express pg cors body-parser dotenv
+ * 
+ * ملف .env:
+ * DATABASE_URL=postgresql://neondb_owner:npg_8dGUTqrn9kbt@ep-delicate-dream-aeqg5zdu-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
  * 
  * التشغيل:
  * node server.js
- * 
- * سيعمل على: http://localhost:3000
  */
 
 const express = require('express');
+const { Pool } = require('pg');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,16 +26,14 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 // ========================
 
-// تفعيل CORS للسماح بالطلبات من أي موقع
-// (في الإنتاج، حدد النطاق بدقة)
 app.use(cors({
-    origin: '*', // غيّر هذا في الإنتاج
-    methods: ['GET', 'POST', 'OPTIONS'],
+    origin: '*',
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type']
 }));
 
-// تحليل JSON
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(express.json());
 
 // Logging middleware
@@ -43,126 +43,330 @@ app.use((req, res, next) => {
 });
 
 // ========================
-// المسارات (Routes)
+// اتصال قاعدة البيانات Neon
 // ========================
 
-/**
- * GET / - اختبار أن الخادم يعمل
- */
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL || 'postgresql://neondb_owner:npg_8dGUTqrn9kbt@ep-delicate-dream-aeqg5zdu-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
+    ssl: {
+        rejectUnauthorized: false
+    }
+});
+
+pool.on('connect', () => {
+    console.log('✅ تم الاتصال بقاعدة بيانات Neon بنجاح');
+});
+
+pool.on('error', (err) => {
+    console.error('❌ خطأ في الاتصال بقاعدة البيانات:', err);
+});
+
+// ========================
+// إنشاء الجداول
+// ========================
+
+async function createTables() {
+    try {
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS orders (
+                id SERIAL PRIMARY KEY,
+                order_id VARCHAR(50) UNIQUE NOT NULL,
+                customer_name VARCHAR(255) NOT NULL,
+                customer_phone VARCHAR(20) NOT NULL,
+                customer_address TEXT NOT NULL,
+                customer_wilaya VARCHAR(100) NOT NULL,
+                customer_municipality VARCHAR(100) NOT NULL,
+                items JSONB NOT NULL,
+                subtotal DECIMAL(10, 2) NOT NULL,
+                shipping_cost DECIMAL(10, 2) NOT NULL,
+                total_price DECIMAL(10, 2) NOT NULL,
+                currency VARCHAR(10) DEFAULT 'DZD',
+                status VARCHAR(50) DEFAULT 'جديد',
+                notes TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `);
+
+        console.log('✅ تم إنشاء جدول الطلبات بنجاح');
+    } catch (error) {
+        console.error('❌ خطأ في إنشاء الجداول:', error.message);
+    }
+}
+
+// ========================
+// Routes
+// ========================
+
 app.get('/', (req, res) => {
     res.json({
         message: 'Welcome to Root Forest API',
-        version: '1.0.0',
-        status: 'running ✅'
+        version: '2.0.0',
+        status: 'running ✅',
+        database: 'Neon PostgreSQL'
     });
 });
 
-/**
- * POST /api/checkout - استقبال طلب الشراء
- */
-app.post('/api/checkout', (req, res) => {
+// إضافة طلب جديد
+app.post('/api/orders', async (req, res) => {
     try {
-        const orderData = req.body;
+        const { customer, items, pricing, currency, timestamp } = req.body;
 
-        console.log('\n📦 ========== طلب جديد ==========');
-        console.log('العميل:', orderData.customer.fullName);
-        console.log('البريد:', orderData.customer.email);
-        console.log('الولاية:', orderData.customer.wilaya);
-        console.log('العناصر:', orderData.items.length);
-        console.log('الإجمالي:', orderData.pricing.total, 'دج');
-        console.log('البيانات الكاملة:', JSON.stringify(orderData, null, 2));
-        console.log('==============================\n');
+        if (!customer || !items || !pricing) {
+            return res.status(400).json({ error: 'بيانات غير كاملة' });
+        }
 
-        // ✅ هنا يمكنك:
-        // 1. حفظ الطلب في قاعدة البيانات
-        // 2. إرسال بريد تأكيد للعميل
-        // 3. تحديث نظام الإدارة
-        // 4. معالجة الدفع
-        // إلخ...
-
-        // إنشاء معرف الطلب الفريد
         const orderId = `ORD-${Date.now()}`;
 
-        // إرسال استجابة النجاح
-        res.status(200).json({
+        const query = `
+            INSERT INTO orders (
+                order_id, 
+                customer_name, 
+                customer_phone, 
+                customer_address, 
+                customer_wilaya, 
+                customer_municipality, 
+                items, 
+                subtotal, 
+                shipping_cost, 
+                total_price, 
+                currency, 
+                status
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+            RETURNING *;
+        `;
+
+        const values = [
+            orderId,
+            customer.fullName,
+            customer.phone,
+            customer.address,
+            customer.wilaya,
+            customer.municipality,
+            JSON.stringify(items),
+            pricing.subtotal,
+            pricing.shipping,
+            pricing.total,
+            currency || 'DZD',
+            'جديد'
+        ];
+
+        const result = await pool.query(query, values);
+
+        console.log(`✅ طلب جديد: ${orderId} من ${customer.fullName}`);
+
+        res.status(201).json({
             success: true,
+            message: '✅ تم حفظ الطلب بنجاح',
             orderId: orderId,
-            message: 'تم استلام طلبك بنجاح! سيتم التواصل معك قريباً.',
-            timestamp: new Date().toISOString(),
-            nextSteps: [
-                'سيتم إرسال رسالة تأكيد إلى بريدك الإلكتروني',
-                'سيتاصل فريقنا بك لتأكيد الطلب',
-                'سيتم توصيل المنتج في أسرع وقت ممكن'
-            ]
+            data: result.rows[0]
         });
 
     } catch (error) {
-        console.error('❌ خطأ في معالجة الطلب:', error);
-        res.status(400).json({
-            success: false,
-            message: 'حدث خطأ في معالجة الطلب',
-            error: error.message
+        console.error('❌ خطأ في إضافة الطلب:', error.message);
+        res.status(500).json({
+            error: 'خطأ في حفظ الطلب',
+            details: error.message
         });
     }
 });
 
-/**
- * GET /api/health - فحص صحة الخادم
- */
+// الحصول على جميع الطلبات
+app.get('/api/orders', async (req, res) => {
+    try {
+        const { wilaya, status, limit = 50, offset = 0 } = req.query;
+
+        let query = 'SELECT * FROM orders WHERE 1=1';
+        const values = [];
+        let paramCount = 0;
+
+        if (wilaya) {
+            paramCount++;
+            query += ` AND customer_wilaya = $${paramCount}`;
+            values.push(wilaya);
+        }
+
+        if (status) {
+            paramCount++;
+            query += ` AND status = $${paramCount}`;
+            values.push(status);
+        }
+
+        query += ` ORDER BY created_at DESC LIMIT $${paramCount + 1} OFFSET $${paramCount + 2}`;
+        values.push(parseInt(limit), parseInt(offset));
+
+        const result = await pool.query(query, values);
+
+        res.json({
+            success: true,
+            total: result.rows.length,
+            orders: result.rows
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في جلب الطلبات:', error.message);
+        res.status(500).json({ error: 'خطأ في جلب الطلبات' });
+    }
+});
+
+// الحصول على طلب واحد
+app.get('/api/orders/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const query = 'SELECT * FROM orders WHERE order_id = $1';
+        const result = await pool.query(query, [id]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'الطلب غير موجود' });
+        }
+
+        res.json({
+            success: true,
+            order: result.rows[0]
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في جلب الطلب:', error.message);
+        res.status(500).json({ error: 'خطأ في جلب الطلب' });
+    }
+});
+
+// تحديث حالة الطلب
+app.patch('/api/orders/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status, notes } = req.body;
+
+        let query = 'UPDATE orders SET updated_at = CURRENT_TIMESTAMP';
+        const values = [];
+        let paramCount = 1;
+
+        if (status) {
+            paramCount++;
+            query += `, status = $${paramCount}`;
+            values.push(status);
+        }
+
+        if (notes) {
+            paramCount++;
+            query += `, notes = $${paramCount}`;
+            values.push(notes);
+        }
+
+        query += ` WHERE order_id = $1 RETURNING *`;
+        values.unshift(id);
+
+        const result = await pool.query(query, values);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'الطلب غير موجود' });
+        }
+
+        res.json({
+            success: true,
+            message: '✅ تم تحديث الطلب بنجاح',
+            order: result.rows[0]
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في تحديث الطلب:', error.message);
+        res.status(500).json({ error: 'خطأ في تحديث الطلب' });
+    }
+});
+
+// حذف الطلب
+app.delete('/api/orders/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const query = 'DELETE FROM orders WHERE order_id = $1 RETURNING *';
+        const result = await pool.query(query, [id]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'الطلب غير موجود' });
+        }
+
+        res.json({
+            success: true,
+            message: '✅ تم حذف الطلب بنجاح'
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في حذف الطلب:', error.message);
+        res.status(500).json({ error: 'خطأ في حذف الطلب' });
+    }
+});
+
+// الحصول على الإحصائيات
+app.get('/api/statistics', async (req, res) => {
+    try {
+        const query = `
+            SELECT 
+                COUNT(*) as total_orders,
+                COALESCE(SUM(total_price), 0) as total_revenue,
+                MAX(created_at) as last_order_date
+            FROM orders;
+        `;
+
+        const result = await pool.query(query);
+        const stats = result.rows[0];
+
+        res.json({
+            success: true,
+            statistics: {
+                total_orders: parseInt(stats.total_orders) || 0,
+                total_revenue: parseFloat(stats.total_revenue) || 0,
+                last_order_date: stats.last_order_date || null
+            }
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في جلب الإحصائيات:', error.message);
+        res.status(500).json({ error: 'خطأ في جلب الإحصائيات' });
+    }
+});
+
+// البحث عن طلبات
+app.get('/api/search', async (req, res) => {
+    try {
+        const { query: searchQuery } = req.query;
+
+        if (!searchQuery) {
+            return res.status(400).json({ error: 'يجب إدخال نص البحث' });
+        }
+
+        const query = `
+            SELECT * FROM orders 
+            WHERE 
+                customer_name ILIKE $1 
+                OR customer_phone ILIKE $1 
+                OR order_id ILIKE $1
+            ORDER BY created_at DESC
+            LIMIT 50;
+        `;
+
+        const result = await pool.query(query, [`%${searchQuery}%`]);
+
+        res.json({
+            success: true,
+            total: result.rows.length,
+            orders: result.rows
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ في البحث:', error.message);
+        res.status(500).json({ error: 'خطأ في البحث' });
+    }
+});
+
+// صحة الخادم
 app.get('/api/health', (req, res) => {
     res.json({
         status: 'healthy ✅',
         timestamp: new Date().toISOString(),
         uptime: process.uptime(),
-        memory: process.memoryUsage()
-    });
-});
-
-/**
- * GET /api/shipping-costs - الحصول على أسعار الشحن
- */
-app.get('/api/shipping-costs', (req, res) => {
-    const shippingCosts = {
-        'algiers': 500,
-        'adrar': 1200,
-        'chlef': 800,
-        'medea': 700,
-        'laghouat': 1000,
-        'oum-el-bouaghi': 900,
-        'batna': 950,
-        'annaba': 1100,
-        'tamanrasset': 1500,
-        'tebessa': 1050,
-        'tlemcen': 850,
-        'tiaret': 800,
-        'tizi-ouzou': 650,
-        'djelfa': 900,
-        'jijel': 800,
-        'sétif': 850,
-        'saïda': 900,
-        'skikda': 900,
-        'sidi-bel-abbès': 950,
-        'béjaïa': 750,
-        'bechar': 1300,
-        'blida': 600,
-        'bouira': 700,
-        'tamanghasset': 1600,
-        'tissemsilt': 850,
-        'el-oued': 1200,
-        'khenchela': 1000,
-        'souk-ahras': 950,
-        'msila': 850,
-        'mila': 900,
-        'ain-defla': 650,
-        'naama': 1100,
-        'ain-temouchent': 900,
-        'ghardaia': 1250,
-        'relizane': 800
-    };
-
-    res.json({
-        currency: 'DZD',
-        shippingCosts: shippingCosts
+        database: 'Neon PostgreSQL'
     });
 });
 
@@ -170,9 +374,6 @@ app.get('/api/shipping-costs', (req, res) => {
 // معالجة الأخطاء
 // ========================
 
-/**
- * 404 - المسار غير موجود
- */
 app.use((req, res) => {
     res.status(404).json({
         success: false,
@@ -181,9 +382,6 @@ app.use((req, res) => {
     });
 });
 
-/**
- * معالج الأخطاء العام
- */
 app.use((err, req, res, next) => {
     console.error('❌ خطأ:', err);
     res.status(500).json({
@@ -197,28 +395,48 @@ app.use((err, req, res, next) => {
 // بدء الخادم
 // ========================
 
-app.listen(PORT, () => {
-    console.log('\n' + '='.repeat(50));
-    console.log('🚀 Root Forest API Server');
-    console.log('='.repeat(50));
-    console.log(`✅ الخادم يعمل على: http://localhost:${PORT}`);
-    console.log(`📝 بيئة التشغيل: ${process.env.NODE_ENV || 'development'}`);
-    console.log('\n📌 المسارات المتاحة:');
-    console.log('   GET  /              - اختبار الاتصال');
-    console.log('   GET  /api/health    - فحص صحة الخادم');
-    console.log('   GET  /api/shipping-costs - أسعار الشحن');
-    console.log('   POST /api/checkout  - استقبال الطلبات');
-    console.log('\n💡 لإيقاف الخادم: اضغط Ctrl+C\n');
-    console.log('='.repeat(50) + '\n');
-});
+async function startServer() {
+    try {
+        await createTables();
 
-// معالجة إيقاف الخادم بشكل آمن
+        app.listen(PORT, () => {
+            console.log('\n' + '='.repeat(60));
+            console.log('🚀 Root Forest API Server');
+            console.log('='.repeat(60));
+            console.log(`✅ الخادم يعمل على: http://localhost:${PORT}`);
+            console.log(`📊 قاعدة البيانات: Neon PostgreSQL`);
+            console.log(`📝 بيئة التشغيل: ${process.env.NODE_ENV || 'development'}`);
+            console.log('\n📌 المسارات المتاحة:');
+            console.log('   GET  /                     - اختبار الاتصال');
+            console.log('   GET  /api/health           - فحص صحة الخادم');
+            console.log('   POST /api/orders           - إنشاء طلب جديد');
+            console.log('   GET  /api/orders           - جلب جميع الطلبات');
+            console.log('   GET  /api/orders/:id       - جلب طلب واحد');
+            console.log('   PATCH /api/orders/:id      - تحديث الطلب');
+            console.log('   DELETE /api/orders/:id     - حذف الطلب');
+            console.log('   GET  /api/statistics       - الإحصائيات');
+            console.log('   GET  /api/search           - البحث عن طلبات');
+            console.log('\n💡 لإيقاف الخادم: اضغط Ctrl+C\n');
+            console.log('='.repeat(60) + '\n');
+        });
+    } catch (error) {
+        console.error('❌ خطأ في بدء الخادم:', error);
+        process.exit(1);
+    }
+}
+
 process.on('SIGTERM', () => {
     console.log('\n⚠️ تم استلام إشارة SIGTERM - إيقاف الخادم...');
+    pool.end();
     process.exit(0);
 });
 
 process.on('SIGINT', () => {
     console.log('\n⚠️ تم استلام إشارة SIGINT - إيقاف الخادم...');
+    pool.end();
     process.exit(0);
 });
+
+startServer();
+
+module.exports = app;
