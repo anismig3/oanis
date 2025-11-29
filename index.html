@@ -1487,10 +1487,10 @@
                 </div>
 
                 <div class="hero-buttons">
-                    <button class="btn btn-primary" onclick="addToCart()">
+                    <button id="addToCartBtn" class="btn btn-primary" onclick="addToCart()">
                         🛒 إضافة إلى السلة
                     </button>
-                    <button class="btn btn-secondary" onclick="openCheckout()">
+                    <button id="buyNowBtn" class="btn btn-secondary" onclick="openCheckout()">
                         اشتر الآن
                     </button>
                 </div>
@@ -1898,6 +1898,7 @@
         // ========================
 
         function addToCart() {
+            console.log('🛒 addToCart clicked');
             const existingItem = cart.find(item => item.id === 'root-forest');
             if (existingItem) {
                 existingItem.quantity += 1;
@@ -1909,6 +1910,7 @@
                     quantity: 1
                 });
             }
+            console.log('📦 Cart:', cart);
             saveCart();
             updateCartUI();
             alert('تمت الإضافة إلى السلة بنجاح!');
@@ -2018,10 +2020,13 @@
         // ========================
 
         function openCheckout() {
+            console.log('🛍️ openCheckout clicked');
+            console.log('Cart length:', cart.length);
             if (cart.length === 0) {
                 alert('أضف منتج إلى السلة أولاً');
                 return;
             }
+            console.log('Opening checkout modal');
             document.getElementById('checkoutOverlay').classList.add('active');
         }
 
@@ -2194,8 +2199,35 @@
         // ========================
 
         window.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 DOMContentLoaded - بدء التهيئة');
             loadCart();
-            console.log('🚀 تم تحميل الموقع');
+            
+            // إضافة event listeners للأزرار باستخدام IDs
+            const addToCartBtn = document.getElementById('addToCartBtn');
+            if (addToCartBtn) {
+                console.log('✅ وجدت زر "إضافة إلى السلة"');
+                addToCartBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('👉 تم الضغط على زر "إضافة إلى السلة"');
+                    addToCart();
+                });
+            } else {
+                console.error('❌ لم أجد زر "إضافة إلى السلة"');
+            }
+            
+            const buyNowBtn = document.getElementById('buyNowBtn');
+            if (buyNowBtn) {
+                console.log('✅ وجدت زر "اشتر الآن"');
+                buyNowBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('👉 تم الضغط على زر "اشتر الآن"');
+                    openCheckout();
+                });
+            } else {
+                console.error('❌ لم أجد زر "اشتر الآن"');
+            }
+            
+            console.log('✅ تم تحميل الموقع وتعيين listeners');
         });
 
         // إغلاق المودال عند الضغط خارجه
