@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Root Forest - مسحوق بروتين طبيعي 100%</title>
+    <link rel="stylesheet" href="style-new.css">
+</head>
+<body>
+    <!-- ==================== Header / Nav ==================== -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo">
+                    <h1>🌿 Root Forest</h1>
+                    <p>بروتين طبيعي 100%</p>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#features">المزايا</a></li>
+                    <li><a href="#pricing">السعر</a></li>
+                    <li><a href="#contact">التواصل</a></li>
+                </ul>
+                <div class="cart-icon">
+                    <button id="cartBtn" class="cart-button">
+                        🛒
+                        <span id="cartCount" class="cart-badge">0</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== Hero Section ==================== -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Root Forest</h2>
+                <p class="subtitle">مسحوق بروتين طبيعي من أفضل المصادر الطبيعية</p>
+                <p class="description">100% طبيعي • صنع في الجزائر • خالٍ من الإضافات الضارة</p>
+                
+                <div class="features-pills">
+                    <div class="pill">✓ 100% طبيعي</div>
+                    <div class="pill">✓ صنع في الجزائر</div>
+                    <div class="pill">✓ خالٍ من الإضافات</div>
+                    <div class="pill">✓ معتمد دوليًا</div>
+                </div>
+
+                <div class="hero-buttons">
+                    <button id="addToCartBtn" class="btn btn-primary">
+                        🛒 إضافة إلى السلة
+                    </button>
+                    <button id="buyNowBtn" class="btn btn-secondary">
+                        💳 اشتر الآن
+                    </button>
+                </div>
+            </div>
+
+            <div class="hero-image">
+                <div class="product-image">
+                    <div class="product-box">
+                        <p>Root Forest</p>
+                        <p class="small">1 كيلوجرام</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Features Section ==================== -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2>لماذا Root Forest؟</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🌱</div>
+                    <h3>100% طبيعي</h3>
+                    <p>مكونات طبيعية نقية بدون مواد كيميائية</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🇩🇿</div>
+                    <h3>صنع في الجزائر</h3>
+                    <p>ندعم المنتجات الجزائرية الأصلية</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">☑️</div>
+                    <h3>معتمد دوليًا</h3>
+                    <p>شهادات دولية وضمان جودة عالية</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💪</div>
+                    <h3>عالي البروتين</h3>
+                    <p>محتوى بروتين عالي للتدريب والرياضة</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Pricing Section ==================== -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <h2>السعر</h2>
+            <div class="price-box">
+                <p class="price-label">السعر لكل علبة (1 كيلوجرام):</p>
+                <p class="price-amount">3,800 دج</p>
+                <p class="price-info">شامل جميع الضرائب والرسوم</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Toast Notification ==================== -->
+    <div id="toast" class="toast">
+        <div class="toast-content">
+            <span id="toastMessage">تمت الإضافة إلى السلة</span>
+        </div>
+    </div>
+
+    <!-- ==================== Success Modal ==================== -->
+    <div id="successModal" class="modal">
+        <div class="modal-content success-modal">
+            <div class="modal-icon">✓</div>
+            <h2>تم بنجاح!</h2>
+            <p id="successMessage">تمت إضافة المنتج إلى السلة</p>
+            <button onclick="closeModal()" class="btn btn-primary">تمام</button>
+        </div>
+    </div>
+
+    <!-- ==================== Error Modal ==================== -->
+    <div id="errorModal" class="modal">
+        <div class="modal-content error-modal">
+            <div class="modal-icon error">✕</div>
+            <h2>خطأ!</h2>
+            <p id="errorMessage">حدث خطأ ما</p>
+            <button onclick="closeErrorModal()" class="btn btn-primary">حسناً</button>
+        </div>
+    </div>
+
+    <script src="script-new.js"></script>
+</body>
+</html>
