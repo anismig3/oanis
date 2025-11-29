@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - Root Forest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #1a1a1a;
+            --color-secondary: #8b0000;
+            --color-accent: #dc143c;
+            --color-light: #f5f5f5;
+            --color-white: #ffffff;
+            --color-text: #1a1a1a;
+            --color-text-light: #555555;
+            --color-border: #cccccc;
+            --color-success: #27ae60;
+            --color-warning: #f39c12;
+            --color-danger: #e74c3c;
+            --color-shadow: rgba(0, 0, 0, 0.15);
+            
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+            
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-sm: 0 2px 8px var(--color-shadow);
+            --shadow-md: 0 4px 16px var(--color-shadow);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--color-light);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        /* =====================
+           الرأس والملاحة
+           ===================== */
+        .navbar {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            padding: var(--spacing-md) 0;
+            box-shadow: 0 4px 12px rgba(220, 20, 60, 0.2);
+            border-bottom: 3px solid #dc143c;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            color: #dc143c;
+            font-size: 1.8rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+        }
+
+        .btn {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: 6px;
+            font-weight: 600;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #8b0000, #dc143c);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #dc143c;
+            border: 2px solid #dc143c;
+        }
+
+        .btn-secondary:hover {
+            background: #dc143c;
+            color: white;
+        }
+
+        /* =====================
+           الحاوية الرئيسية
+           ===================== */
+        .container {
+            max-width: 1400px;
+            margin: var(--spacing-xl) auto;
+            padding: 0 var(--spacing-lg);
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-xl);
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+        }
+
+        .header-section h2 {
+            color: #dc143c;
+            font-size: 2rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .stat-card {
+            background: white;
+            padding: var(--spacing-lg);
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+            border-right: 4px solid #dc143c;
+        }
+
+        .stat-card h3 {
+            color: var(--color-text-light);
+            font-size: 0.9rem;
+            margin-bottom: var(--spacing-sm);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #dc143c;
+        }
+
+        /* =====================
+           الفلترة والبحث
+           ===================== */
+        .filter-section {
+            background: white;
+            padding: var(--spacing-lg);
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: var(--spacing-xl);
+            display: flex;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-section input,
+        .filter-section select {
+            padding: var(--spacing-sm);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+        }
+
+        .filter-section input:focus,
+        .filter-section select:focus {
+            outline: none;
+            border-color: #dc143c;
+            box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.1);
+        }
+
+        /* =====================
+           جدول الطلبات
+           ===================== */
+        .orders-table-wrapper {
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .orders-table thead {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            color: white;
+        }
+
+        .orders-table th {
+            padding: var(--spacing-md);
+            text-align: right;
+            font-weight: 600;
+            border-bottom: 2px solid #dc143c;
+        }
+
+        .orders-table td {
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .orders-table tbody tr:hover {
+            background-color: #f9f9f9;
+            transition: var(--transition);
+        }
+
+        .order-id {
+            font-weight: 600;
+            color: #dc143c;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-new {
+            background-color: #e8f4f8;
+            color: #0288d1;
+        }
+
+        .status-pending {
+            background-color: #fff3e0;
+            color: #f57c00;
+        }
+
+        .status-completed {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .price {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .btn-small {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            font-size: 0.85rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .btn-view {
+            background-color: #0288d1;
+            color: white;
+        }
+
+        .btn-view:hover {
+            background-color: #0277bd;
+        }
+
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-export {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .btn-export:hover {
+            background-color: #229954;
+        }
+
+        /* =====================
+           مودال التفاصيل
+           ===================== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 200;
+            direction: rtl;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            padding: var(--spacing-xl);
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal h2 {
+            color: #dc143c;
+            margin-bottom: var(--spacing-lg);
+            border-bottom: 2px solid #dc143c;
+            padding-bottom: var(--spacing-md);
+        }
+
+        .modal-section {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .modal-section h3 {
+            color: #1a1a1a;
+            margin-bottom: var(--spacing-sm);
+            font-size: 1.1rem;
+        }
+
+        .modal-item {
+            padding: var(--spacing-sm) 0;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .modal-item:last-child {
+            border-bottom: none;
+        }
+
+        .modal-label {
+            color: var(--color-text-light);
+            font-weight: 600;
+        }
+
+        .modal-value {
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+
+        .modal-total {
+            background: #f5f5f5;
+            padding: var(--spacing-md);
+            border-radius: 6px;
+            margin-top: var(--spacing-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .close-modal {
+            background: white;
+            color: #dc143c;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 2px solid #dc143c;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            margin-top: var(--spacing-lg);
+            width: 100%;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            background: #dc143c;
+            color: white;
+        }
+
+        /* =====================
+           الرسالة الفارغة
+           ===================== */
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-2xl);
+            color: var(--color-text-light);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            color: #1a1a1a;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        /* =====================
+           Responsive
+           ===================== */
+        @media (max-width: 768px) {
+            .orders-table {
+                font-size: 0.9rem;
+            }
+
+            .orders-table th,
+            .orders-table td {
+                padding: var(--spacing-sm);
+            }
+
+            .filter-section {
+                flex-direction: column;
+            }
+
+            .filter-section input,
+            .filter-section select,
+            .btn {
+                width: 100%;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-small {
+                width: 100%;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar-container {
+                flex-direction: column;
+                text-align: center;
+                gap: var(--spacing-md);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- الرأس -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <h1>🏆 Root Forest - لوحة التحكم</h1>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="goToStore()">العودة للمتجر</button>
+                <button class="btn btn-export btn-primary" onclick="exportToJSON()">📥 تنزيل البيانات</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- الحاوية الرئيسية -->
+    <div class="container">
+        <!-- رؤوس الإحصائيات -->
+        <div class="stats">
+            <div class="stat-card">
+                <h3>إجمالي الطلبات</h3>
+                <div class="value" id="totalOrders">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>إجمالي المبيعات</h3>
+                <div class="value" id="totalRevenue">0 د.ج</div>
+            </div>
+            <div class="stat-card">
+                <h3>المنتجات المباعة</h3>
+                <div class="value" id="totalItems">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>آخر طلب</h3>
+                <div class="value" id="lastOrder" style="font-size: 1.2rem;">-</div>
+            </div>
+        </div>
+
+        <!-- قسم الفلترة -->
+        <div class="filter-section">
+            <input type="text" id="searchInput" placeholder="ابحث باسم العميل أو رقم الهاتف..." style="flex: 1; min-width: 200px;">
+            <select id="wiayaFilter" style="min-width: 150px;">
+                <option value="">جميع الولايات</option>
+            </select>
+            <select id="statusFilter" style="min-width: 150px;">
+                <option value="">جميع الحالات</option>
+                <option value="جديد">جديد</option>
+                <option value="قيد المعالجة">قيد المعالجة</option>
+                <option value="مكتمل">مكتمل</option>
+            </select>
+            <button class="btn btn-primary" onclick="clearFilters()">مسح الفلاتر</button>
+        </div>
+
+        <!-- رأس القسم -->
+        <div class="header-section">
+            <h2>قائمة الطلبات</h2>
+        </div>
+
+        <!-- جدول الطلبات -->
+        <div class="orders-table-wrapper">
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>رقم الطلب</th>
+                        <th>اسم العميل</th>
+                        <th>رقم الهاتف</th>
+                        <th>الولاية</th>
+                        <th>البلدية</th>
+                        <th>الكمية</th>
+                        <th>الإجمالي</th>
+                        <th>التاريخ</th>
+                        <th>الحالة</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                    <tr>
+                        <td colspan="10" class="empty-state">
+                            <div class="empty-state-icon">📦</div>
+                            <h3>لا توجد طلبات</h3>
+                            <p>سيتم عرض الطلبات الجديدة هنا عند قبول طلب جديد</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- مودال التفاصيل -->
+    <div class="modal-overlay" id="detailsModal">
+        <div class="modal">
+            <h2>تفاصيل الطلب</h2>
+            
+            <div class="modal-section">
+                <h3>معلومات العميل</h3>
+                <div class="modal-item">
+                    <span class="modal-label">الاسم:</span>
+                    <span class="modal-value" id="modalName">-</span>
+                </div>
+                <div class="modal-item">
+                    <span class="modal-label">الهاتف:</span>
+                    <span class="modal-value" id="modalPhone">-</span>
+                </div>
+                <div class="modal-item">
+                    <span class="modal-label">العنوان:</span>
+                    <span class="modal-value" id="modalAddress">-</span>
+                </div>
+                <div class="modal-item">
+                    <span class="modal-label">الولاية:</span>
+                    <span class="modal-value" id="modalWilaya">-</span>
+                </div>
+                <div class="modal-item">
+                    <span class="modal-label">البلدية:</span>
+                    <span class="modal-value" id="modalMunicipality">-</span>
+                </div>
+            </div>
+
+            <div class="modal-section">
+                <h3>المنتجات</h3>
+                <div id="modalItems"></div>
+            </div>
+
+            <div class="modal-section">
+                <div class="modal-total">
+                    <span>المجموع النهائي:</span>
+                    <span id="modalTotalPrice" style="color: #27ae60;">0 د.ج</span>
+                </div>
+            </div>
+
+            <div class="modal-section">
+                <div class="modal-item">
+                    <span class="modal-label">تاريخ الطلب:</span>
+                    <span class="modal-value" id="modalDate">-</span>
+                </div>
+                <div class="modal-item">
+                    <span class="modal-label">الحالة:</span>
+                    <span class="modal-value" id="modalStatus">-</span>
+                </div>
+            </div>
+
+            <button class="close-modal" onclick="closeDetailsModal()">إغلاق</button>
+        </div>
+    </div>
+
+    <script>
+        const API_ENDPOINT = 'http://localhost:3000/api/orders';
+        let allOrders = [];
+        let filteredOrders = [];
+
+        // ====================================
+        // تحميل الطلبات من localStorage
+        // ====================================
+        function loadOrders() {
+            const stored = localStorage.getItem('rootForestOrders');
+            allOrders = stored ? JSON.parse(stored) : [];
+            filteredOrders = [...allOrders];
+            renderOrders();
+            updateStats();
+            populateFilters();
+        }
+
+        // ====================================
+        // حفظ الطلب الجديد
+        // ====================================
+        function saveNewOrder(orderData) {
+            const order = {
+                id: 'ORD-' + Date.now(),
+                customer: orderData.customer,
+                items: orderData.items,
+                pricing: orderData.pricing,
+                currency: orderData.currency,
+                timestamp: orderData.timestamp,
+                status: 'جديد',
+                createdAt: new Date().toLocaleString('ar-DZ')
+            };
+
+            allOrders.unshift(order);
+            localStorage.setItem('rootForestOrders', JSON.stringify(allOrders));
+            
+            // إرسال بيانات للخادم (اختياري)
+            sendToServer(order);
+            
+            return order;
+        }
+
+        // ====================================
+        // إرسال البيانات للخادم
+        // ====================================
+        function sendToServer(orderData) {
+            fetch(API_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderData)
+            })
+            .catch(error => console.log('خادم غير متاح - تم حفظ البيانات محلياً'));
+        }
+
+        // ====================================
+        // عرض الطلبات في الجدول
+        // ====================================
+        function renderOrders() {
+            const tbody = document.getElementById('ordersTableBody');
+            
+            if (filteredOrders.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="10" class="empty-state">
+                            <div class="empty-state-icon">📦</div>
+                            <h3>لا توجد طلبات مطابقة</h3>
+                            <p>لا توجد طلبات تطابق معايير البحث</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filteredOrders.map(order => `
+                <tr>
+                    <td class="order-id">${order.id}</td>
+                    <td>${order.customer.fullName}</td>
+                    <td>${order.customer.phone}</td>
+                    <td>${order.customer.wilaya}</td>
+                    <td>${order.customer.municipality}</td>
+                    <td>${order.items.reduce((sum, item) => sum + item.quantity, 0)}</td>
+                    <td class="price">${order.pricing.total} د.ج</td>
+                    <td>${new Date(order.timestamp).toLocaleDateString('ar-DZ', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    })}</td>
+                    <td><span class="status-badge status-${order.status === 'جديد' ? 'new' : order.status === 'قيد المعالجة' ? 'pending' : 'completed'}">${order.status}</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-small btn-view" onclick="viewOrderDetails('${order.id}')">عرض</button>
+                            <button class="btn-small btn-delete" onclick="deleteOrder('${order.id}')">حذف</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // ====================================
+        // عرض تفاصيل الطلب
+        // ====================================
+        function viewOrderDetails(orderId) {
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+
+            document.getElementById('modalName').textContent = order.customer.fullName;
+            document.getElementById('modalPhone').textContent = order.customer.phone;
+            document.getElementById('modalAddress').textContent = order.customer.address;
+            document.getElementById('modalWilaya').textContent = order.customer.wilaya;
+            document.getElementById('modalMunicipality').textContent = order.customer.municipality;
+            document.getElementById('modalTotalPrice').textContent = order.pricing.total + ' د.ج';
+            document.getElementById('modalDate').textContent = new Date(order.timestamp).toLocaleString('ar-DZ');
+            document.getElementById('modalStatus').textContent = order.status;
+
+            const itemsHtml = order.items.map(item => `
+                <div class="modal-item">
+                    <span class="modal-label">${item.name}</span>
+                    <span class="modal-value">${item.quantity} × ${item.price} د.ج</span>
+                </div>
+            `).join('');
+
+            const shippingHtml = `
+                <div class="modal-item">
+                    <span class="modal-label">الشحن</span>
+                    <span class="modal-value">${order.pricing.shipping} د.ج</span>
+                </div>
+            `;
+
+            document.getElementById('modalItems').innerHTML = itemsHtml + shippingHtml;
+
+            document.getElementById('detailsModal').classList.add('active');
+        }
+
+        // ====================================
+        // إغلاق التفاصيل
+        // ====================================
+        function closeDetailsModal() {
+            document.getElementById('detailsModal').classList.remove('active');
+        }
+
+        // ====================================
+        // حذف الطلب
+        // ====================================
+        function deleteOrder(orderId) {
+            if (confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
+                allOrders = allOrders.filter(o => o.id !== orderId);
+                localStorage.setItem('rootForestOrders', JSON.stringify(allOrders));
+                loadOrders();
+            }
+        }
+
+        // ====================================
+        // تحديث الإحصائيات
+        // ====================================
+        function updateStats() {
+            const totalOrders = allOrders.length;
+            const totalRevenue = allOrders.reduce((sum, order) => sum + order.pricing.total, 0);
+            const totalItems = allOrders.reduce((sum, order) => sum + order.items.reduce((s, item) => s + item.quantity, 0), 0);
+            const lastOrderDate = allOrders.length > 0 ? new Date(allOrders[0].timestamp).toLocaleDateString('ar-DZ') : '-';
+
+            document.getElementById('totalOrders').textContent = totalOrders;
+            document.getElementById('totalRevenue').textContent = totalRevenue + ' د.ج';
+            document.getElementById('totalItems').textContent = totalItems;
+            document.getElementById('lastOrder').textContent = lastOrderDate;
+        }
+
+        // ====================================
+        // ملء قائمة الفلترة
+        // ====================================
+        function populateFilters() {
+            const wilayas = new Set();
+            allOrders.forEach(order => wilayas.add(order.customer.wilaya));
+
+            const wilayaSelect = document.getElementById('wiayaFilter');
+            const existingOptions = wilayaSelect.querySelectorAll('option[value!=""]');
+            existingOptions.forEach(opt => opt.remove());
+
+            Array.from(wilayas).sort().forEach(wilaya => {
+                const option = document.createElement('option');
+                option.value = wilaya;
+                option.textContent = wilaya;
+                wilayaSelect.appendChild(option);
+            });
+        }
+
+        // ====================================
+        // البحث والفلترة
+        // ====================================
+        function applyFilters() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const wiayaFilter = document.getElementById('wiayaFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+
+            filteredOrders = allOrders.filter(order => {
+                const matchSearch = order.customer.fullName.toLowerCase().includes(searchText) ||
+                                  order.customer.phone.includes(searchText);
+                const matchWilaya = !wiayaFilter || order.customer.wilaya === wiayaFilter;
+                const matchStatus = !statusFilter || order.status === statusFilter;
+
+                return matchSearch && matchWilaya && matchStatus;
+            });
+
+            renderOrders();
+        }
+
+        // ====================================
+        // مسح الفلاتر
+        // ====================================
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('wiayaFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            filteredOrders = [...allOrders];
+            renderOrders();
+        }
+
+        // ====================================
+        // تصدير إلى JSON
+        // ====================================
+        function exportToJSON() {
+            const dataStr = JSON.stringify(allOrders, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `طلبات-root-forest-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+        }
+
+        // ====================================
+        // الذهاب للمتجر
+        // ====================================
+        function goToStore() {
+            window.location.href = 'index.html';
+        }
+
+        // ====================================
+        // الأحداث
+        // ====================================
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        document.getElementById('wiayaFilter').addEventListener('change', applyFilters);
+        document.getElementById('statusFilter').addEventListener('change', applyFilters);
+
+        // إغلاق المودال عند الضغط خارجه
+        document.getElementById('detailsModal').addEventListener('click', (e) => {
+            if (e.target.id === 'detailsModal') {
+                closeDetailsModal();
+            }
+        });
+
+        // تحميل البيانات عند فتح الصفحة
+        window.addEventListener('DOMContentLoaded', loadOrders);
+
+        // تحديث البيانات كل 5 ثوان
+        setInterval(loadOrders, 5000);
+
+        // كائن عام لاستخدام الدوال من index.html
+        window.orderSystem = {
+            saveNewOrder: saveNewOrder,
+            sendToServer: sendToServer
+        };
+    </script>
+</body>
+</html>

@@ -1190,7 +1190,10 @@
         <div class="success-icon">✓</div>
         <h2>تم استلام طلبك!</h2>
         <p>شكراً لك على اختيارك Root Forest. سيقوم فريقنا بالتواصل معك قريباً للتأكيد والتوصيل.</p>
-        <button class="btn btn-primary" onclick="closeSuccess()">العودة للصفحة الرئيسية</button>
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <button class="btn btn-primary" onclick="closeSuccess()" style="flex: 1;">العودة للصفحة الرئيسية</button>
+            <button class="btn btn-primary" onclick="goToAdmin()" style="flex: 1; background: linear-gradient(135deg, #27ae60, #229954);">عرض الطلبات 📊</button>
+        </div>
     </div>
 
     <!-- التذييل -->
@@ -1540,30 +1543,33 @@
 
             console.log('📦 طلب جديد:', checkoutData);
 
-            // إرسال البيانات إلى الخادم
+            // حفظ الطلب في localStorage
+            const orderId = 'ORD-' + Date.now();
+            const orderWithId = {
+                id: orderId,
+                ...checkoutData,
+                status: 'جديد',
+                createdAt: new Date().toLocaleString('ar-DZ')
+            };
+
+            const existingOrders = JSON.parse(localStorage.getItem('rootForestOrders') || '[]');
+            existingOrders.unshift(orderWithId);
+            localStorage.setItem('rootForestOrders', JSON.stringify(existingOrders));
+
+            // إرسال البيانات إلى الخادم (اختياري)
             fetch(API_ENDPOINT, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(checkoutData)
+                body: JSON.stringify(orderWithId)
             })
-            .then(response => response.ok ? response.json() : Promise.reject('خطأ'))
-            .then(data => {
-                console.log('✅ نجح الطلب');
-                closeCheckout();
-                showSuccess();
-                cart = [];
-                saveCart();
-                updateCartUI();
-            })
-            .catch(error => {
-                console.error('❌ خطأ:', error);
-                // في حالة عدم وجود خادم حقيقي، نعرض نجاح محاكي
-                closeCheckout();
-                showSuccess();
-                cart = [];
-                saveCart();
-                updateCartUI();
-            });
+            .catch(error => console.log('✓ تم حفظ الطلب محلياً'));
+
+            console.log('✅ تم حفظ الطلب - رقم:', orderId);
+            closeCheckout();
+            showSuccess();
+            cart = [];
+            saveCart();
+            updateCartUI();
         }
 
         function showFieldError(fieldName) {
@@ -1580,6 +1586,10 @@
         function closeSuccess() {
             document.getElementById('successOverlay').classList.remove('active');
             document.getElementById('successModal').classList.remove('active');
+        }
+
+        function goToAdmin() {
+            window.location.href = 'admin.html';
         }
 
         // ========================
