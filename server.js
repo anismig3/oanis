@@ -215,9 +215,31 @@ app.post('/api/orders', async (req, res) => {
             if (err) {
                 console.error('❌ خطأ في إضافة الطلب:', err.message);
                 console.error('❌ Stack:', err.stack);
+                
+                // رسالة مفصلة للمستخدم حسب نوع الخطأ
+                let errorMessage = 'خطأ في حفظ الطلب';
+                if (err.message.includes('SQLITE_BUSY')) {
+                    errorMessage = 'قاعدة البيانات مشغولة حالياً، يرجى المحاولة مرة أخرى';
+                } else if (err.message.includes('SQLITE_CANTOPEN')) {
+                    errorMessage = 'لا يمكن الوصول إلى قاعدة البيانات';
+                } else if (err.message.includes('SQLITE_READONLY')) {
+                    errorMessage = 'قاعدة البيانات في وضع القراءة فقط';
+                }
+                
                 return res.status(500).json({
-                    error: 'خطأ في حفظ الطلب',
+                    success: false,
+                    error: errorMessage,
+                    message: errorMessage,
                     details: err.message
+                });
+            }
+
+            if (!lastID || lastID === 0) {
+                console.error('❌ فشل إدراج الطلب - لم يتم الحصول على معرف الصف');
+                return res.status(500).json({
+                    success: false,
+                    error: 'فشل حفظ الطلب',
+                    message: 'فشل حفظ الطلب في قاعدة البيانات'
                 });
             }
 
@@ -566,14 +588,18 @@ function updateStatistics() {
 }
 
 // دالة مساعدة لإعادة محاولة العملية عند فشلها بسبب القفل
-function dbRunWithRetry(query, params, callback, retries = 3, delay = 100) {
+function dbRunWithRetry(query, params, callback, retries = 10, delay = 50) {
     db.run(query, params, function(err) {
         if (err && err.message.includes('SQLITE_BUSY') && retries > 0) {
-            console.warn(`⚠️ قاعدة البيانات مشغولة، إعادة محاولة... (${3 - retries + 1}/3)`);
+            const attempt = 11 - retries;
+            console.warn(`⚠️  قاعدة البيانات مشغولة، إعادة محاولة... (${attempt}/10)`);
             setTimeout(() => {
-                dbRunWithRetry(query, params, callback, retries - 1, delay * 2);
+                dbRunWithRetry(query, params, callback, retries - 1, delay * 1.5);
             }, delay);
         } else {
+            if (err && err.message.includes('SQLITE_BUSY')) {
+                console.error('❌ فشلت جميع المحاولات - قاعدة البيانات مقفولة');
+            }
             // تمرير lastID كمعامل
             callback(err, this.lastID);
         }

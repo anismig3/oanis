@@ -2088,30 +2088,46 @@
 
             console.log('📦 طلب جديد:', checkoutData);
 
+            // إظهار رسالة التحميل
+            const submitBtn = document.querySelector('.checkout-actions button');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = '⏳ جاري معالجة الطلب...';
+            submitBtn.disabled = true;
+
             // إرسال البيانات إلى الخادم
             fetch(API_ENDPOINT, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(checkoutData)
+                body: JSON.stringify(checkoutData),
+                timeout: 30000
             })
-            .then(response => response.ok ? response.json() : Promise.reject('خطأ'))
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => {
+                        throw new Error(data.message || data.error || 'خطأ في حفظ الطلب');
+                    });
+                }
+                return response.json();
+            })
             .then(data => {
-                console.log('✅ نجح الطلب');
-                closeCheckout();
-                showSuccess();
-                cart = [];
-                saveCart();
-                updateCartUI();
+                console.log('✅ نجح الطلب:', data);
+                if (data.success) {
+                    // إظهار رسالة النجاح
+                    closeCheckout();
+                    showSuccessWithMessage(`✅ ${data.message}\nمعرف الطلب: ${data.orderId}`);
+                    cart = [];
+                    saveCart();
+                    updateCartUI();
+                } else {
+                    throw new Error(data.message || data.error || 'فشل الطلب');
+                }
             })
             .catch(error => {
                 console.error('❌ خطأ:', error);
-                // في حالة عدم وجود خادم حقيقي، نعرض نجاح محاكي
-                closeCheckout();
-                showSuccess();
-                cart = [];
-                saveCart();
-                updateCartUI();
-            });
+                // إظهار رسالة الخطأ للمستخدم
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                showErrorMessage(error.message || 'حدث خطأ في معالجة الطلب. يرجى المحاولة مرة أخرى.');\n            });
         }
 
         function showFieldError(fieldName) {
@@ -2123,6 +2139,52 @@
         function showSuccess() {
             document.getElementById('successOverlay').classList.add('active');
             document.getElementById('successModal').classList.add('active');
+        }
+
+        function showSuccessWithMessage(message) {
+            const modal = document.getElementById('successModal');
+            const successText = modal.querySelector('p');
+            if (successText) {
+                successText.textContent = message;
+            }
+            document.getElementById('successOverlay').classList.add('active');
+            modal.classList.add('active');
+            
+            // إغلاق تلقائي بعد 5 ثوان
+            setTimeout(() => closeSuccess(), 5000);
+        }
+
+        function showErrorMessage(message) {
+            // إنشاء عنصر لعرض الخطأ إذا لم يكن موجوداً
+            let errorDiv = document.getElementById('errorNotification');
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.id = 'errorNotification';
+                errorDiv.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #8b0000;
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 5px;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+                    z-index: 10000;
+                    max-width: 400px;
+                    font-size: 14px;
+                    direction: rtl;
+                    text-align: right;
+                `;
+                document.body.appendChild(errorDiv);
+            }
+            
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            
+            // إغلاق تلقائي بعد 6 ثوان
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 6000);
         }
 
         function closeSuccess() {
