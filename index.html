@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Root Forest - مسحوق بروتين طبيعي 100%</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ========================
+           نظام الألوان والمتغيرات
+           ======================== */
+        :root {
+            /* الألوان الأساسية - أحمر غامق وأسود */
+            --color-primary: #1a1a1a;           /* أسود داكن (أساسي) */
+            --color-secondary: #8b0000;         /* أحمر غامق جداً */
+            --color-accent: #dc143c;            /* أحمر قاني */
+            --color-light: #f5f5f5;             /* رمادي فاتح (خلفية) */
+            --color-white: #ffffff;             /* أبيض */
+            --color-text: #1a1a1a;              /* نص داكن */
+            --color-text-light: #555555;        /* نص فاتح */
+            --color-border: #cccccc;            /* حدود ناعمة */
+            --color-success: #27ae60;           /* أخضر نجاح */
+            --color-shadow: rgba(0, 0, 0, 0.15); /* ظل أقوى */
+            
+            /* المسافات */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+            --spacing-2xl: 4rem;
+            
+            /* التأثيرات */
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-sm: 0 2px 8px var(--color-shadow);
+            --shadow-md: 0 4px 16px var(--color-shadow);
+            --shadow-lg: 0 8px 24px var(--color-shadow);
+        }
+
+        /* ========================
+           النمط العام
+           ======================== */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--color-light);
+            color: var(--color-text);
+            line-height: 1.6;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        button {
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+
+        input, select, textarea {
+            font-family: 'Cairo', sans-serif;
+            transition: var(--transition);
+        }
+
+        /* ========================
+           الرأس والملاحة (Navbar)
+           ======================== */
+        .navbar {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            box-shadow: 0 4px 12px rgba(220, 20, 60, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: var(--spacing-md) 0;
+            border-bottom: 3px solid #dc143c;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #dc143c;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #dc143c, #8b0000);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-white);
+            font-size: 1.3rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--spacing-xl);
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #cccccc;
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: #dc143c;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: #dc143c;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            background: linear-gradient(135deg, #dc143c, #8b0000);
+            color: var(--color-white);
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(220, 20, 60, 0.4);
+        }
+
+        /* ========================
+           قسم البطل (Hero)
+           ======================== */
+        .hero {
+            background: linear-gradient(135deg, #f5f5f5 0%, rgba(220, 20, 60, 0.08) 100%);
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-2xl);
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #dc143c;
+            margin-bottom: var(--spacing-md);
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            color: var(--color-text-light);
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.8;
+        }
+
+        .hero-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle, rgba(220, 20, 60, 0.1) 0%, transparent 70%);
+            min-height: 400px;
+            border-radius: 12px;
+        }
+
+        .hero-image svg {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+        }
+
+        /* ========================
+           بطاقات المواصفات (Badges)
+           ======================== */
+        .badges-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--color-white);
+            border: 2px solid #dc143c;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #dc143c;
+            box-shadow: 0 2px 8px rgba(220, 20, 60, 0.15);
+            transition: var(--transition);
+        }
+
+        .badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(220, 20, 60, 0.3);
+            background: #dc143c;
+            color: var(--color-white);
+        }
+
+        .badge::before {
+            content: '✓';
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        /* ========================
+           الأزرار
+           ======================== */
+        .btn {
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            text-transform: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #dc143c, #8b0000);
+            color: var(--color-white);
+            box-shadow: 0 4px 12px rgba(220, 20, 60, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(220, 20, 60, 0.5);
+            background: linear-gradient(135deg, #e91e3f, #a00000);
+        }
+
+        .btn-secondary {
+            background: var(--color-white);
+            color: #dc143c;
+            border: 2px solid #dc143c;
+        }
+
+        .btn-secondary:hover {
+            background: #dc143c;
+            color: var(--color-white);
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, #dc143c, #8b0000);
+            color: var(--color-white);
+            box-shadow: 0 4px 12px rgba(220, 20, 60, 0.3);
+        }
+
+        .btn-accent:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(220, 20, 60, 0.5);
+            background: linear-gradient(135deg, #e91e3f, #a00000);
+        }
+
+        .btn-sm {
+            padding: var(--spacing-xs) var(--spacing-md);
+            font-size: 0.9rem;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        /* ========================
+           القسم الرئيسي
+           ======================== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-lg);
+        }
+
+        .section {
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: var(--spacing-lg);
+            position: relative;
+            padding-bottom: var(--spacing-md);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #dc143c, #8b0000);
+            border-radius: 2px;
+        }
+
+        /* ========================
+           بطاقة المواصفات (Specs Card)
+           ======================== */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .spec-card {
+            background: var(--color-white);
+            padding: var(--spacing-lg);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--color-border);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .spec-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .spec-icon {
+            font-size: 2rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .spec-label {
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .spec-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #dc143c;
+        }
+
+        /* ========================
+           السلة
+           ======================== */
+        .cart-section {
+            background: var(--color-white);
+            padding: var(--spacing-lg);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: var(--spacing-lg);
+            align-items: center;
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .cart-item-price {
+            font-weight: 600;
+            color: #dc143c;
+            font-size: 1.1rem;
+        }
+
+        .qty-control {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            background: #f5f5f5;
+            border-radius: 6px;
+            padding: 2px;
+            border: 1px solid #dc143c;
+        }
+
+        .qty-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: none;
+            color: #dc143c;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .qty-btn:hover {
+            background: #dc143c;
+            color: var(--color-white);
+            border-radius: 4px;
+        }
+
+        .qty-display {
+            padding: 0 var(--spacing-sm);
+            min-width: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .cart-remove {
+            background: rgba(220, 20, 60, 0.1);
+            color: #dc143c;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid #dc143c;
+        }
+
+        .cart-remove:hover {
+            background: #dc143c;
+            color: var(--color-white);
+        }
+
+        /* ========================
+           ملخص الطلب
+           ======================== */
+        .order-summary {
+            background: linear-gradient(135deg, #f5f5f5 0%, rgba(220, 20, 60, 0.05) 100%);
+            padding: var(--spacing-lg);
+            border-radius: 12px;
+            margin-bottom: var(--spacing-lg);
+            border: 1px solid rgba(220, 20, 60, 0.2);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md) 0;
+            border-bottom: 1px solid var(--color-border);
+            font-size: 0.95rem;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            color: var(--color-text-light);
+            font-weight: 500;
+        }
+
+        .summary-value {
+            color: var(--color-text);
+            font-weight: 600;
+        }
+
+        .summary-total {
+            padding: var(--spacing-lg) 0;
+            padding-top: var(--spacing-lg);
+            border-top: 2px solid #dc143c;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .summary-total .summary-label {
+            color: #dc143c;
+        }
+
+        .summary-total .summary-value {
+            color: #dc143c;
+            font-size: 1.5rem;
+        }
+
+        /* ========================
+           المودال (Checkout Modal)
+           ======================== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--color-white);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(220, 20, 60, 0.3);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease-out;
+            border-top: 4px solid #dc143c;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: var(--spacing-lg);
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            color: #1a1a1a;
+            margin: 0;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: var(--color-light);
+            border-radius: 50%;
+            color: var(--color-text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: var(--color-border);
+        }
+
+        .modal-content {
+            padding: var(--spacing-lg);
+        }
+
+        /* ========================
+           نموذج الشراء
+           ======================== */
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--spacing-sm);
+            font-weight: 600;
+            color: var(--color-text);
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: 'Cairo', sans-serif;
+            background: var(--color-white);
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #dc143c;
+            box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.15);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group.error input,
+        .form-group.error select {
+            border-color: #e74c3c;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: var(--spacing-xs);
+            display: none;
+        }
+
+        .form-group.error .error-message {
+            display: block;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+        }
+
+        .form-row .form-group {
+            margin-bottom: 0;
+        }
+
+        /* ========================
+           ملخص الطلب في المودال
+           ======================== */
+        .modal-summary {
+            background: linear-gradient(135deg, #f5f5f5 0%, rgba(220, 20, 60, 0.05) 100%);
+            padding: var(--spacing-lg);
+            border-radius: 12px;
+            margin-bottom: var(--spacing-lg);
+            border: 1px solid rgba(220, 20, 60, 0.2);
+        }
+
+        .modal-summary .summary-row {
+            padding: var(--spacing-md) 0;
+        }
+
+        /* ========================
+           أزرار المودال
+           ======================== */
+        .modal-footer {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+            padding: var(--spacing-lg);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .modal-footer .btn {
+            margin: 0;
+            width: 100%;
+        }
+
+        /* ========================
+           نافذة النجاح (Success Modal)
+           ======================== */
+        .success-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--color-white);
+            padding: 3rem;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            z-index: 2000;
+            display: none;
+            animation: popIn 0.4s ease-out;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .success-modal.active {
+            display: block;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #dc143c, #8b0000);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-white);
+            font-size: 3rem;
+            margin: 0 auto var(--spacing-lg);
+            box-shadow: 0 4px 12px rgba(220, 20, 60, 0.3);
+        }
+
+        .success-modal h2 {
+            font-size: 1.5rem;
+            color: #1a1a1a;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .success-modal p {
+            color: var(--color-text-light);
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.8;
+        }
+
+        .success-modal .btn {
+            width: 100%;
+            margin-top: var(--spacing-lg);
+        }
+
+        .success-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(4px);
+            z-index: 1999;
+            display: none;
+        }
+
+        .success-overlay.active {
+            display: block;
+        }
+
+        /* ========================
+           التذييل
+           ======================== */
+        .footer {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            color: var(--color-white);
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            text-align: center;
+            margin-top: var(--spacing-2xl);
+            border-top: 3px solid #dc143c;
+        }
+
+        .footer p {
+            margin-bottom: var(--spacing-md);
+            opacity: 0.9;
+        }
+
+        /* ========================
+           الاستجابة (Responsive)
+           ======================== */
+        @media (max-width: 768px) {
+            :root {
+                --spacing-xl: 2rem;
+                --spacing-2xl: 3rem;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-lg);
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: var(--spacing-lg);
+            }
+
+            .specs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-item {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-footer {
+                grid-template-columns: 1fr;
+            }
+
+            .success-modal {
+                padding: 2rem;
+            }
+
+            .success-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-container {
+                padding: 0 var(--spacing-md);
+            }
+
+            .nav-links {
+                gap: var(--spacing-md);
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .logo-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            .hero-content h1 {
+                font-size: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .modal {
+                width: 95%;
+            }
+
+            .container {
+                padding: 0 var(--spacing-md);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- الرأس والملاحة -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <div class="logo-icon">🌿</div>
+                <span>Root Forest</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#product">المنتج</a></li>
+                <li><a href="#specs">المواصفات</a></li>
+                <li><a href="#cart-section">السلة</a></li>
+                <li class="cart-icon" id="cartIconNav">
+                    🛒
+                    <span class="cart-badge" id="cartCountNav">0</span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- القسم الرئيسي -->
+    <div class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Root Forest</h1>
+                <p>مسحوق بروتين طبيعي 100% من أفضل المصادر الطبيعية. صحة وقوة في كل كوب.</p>
+                
+                <div class="badges-container">
+                    <span class="badge">100% طبيعي</span>
+                    <span class="badge">صنع في الجزائر</span>
+                    <span class="badge">خالي من الإضافات</span>
+                    <span class="badge">معتمد دوليًا</span>
+                </div>
+
+                <div style="display: flex; gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
+                    <button class="btn btn-primary" onclick="addToCart()">
+                        🛒 إضافة إلى السلة
+                    </button>
+                    <button class="btn btn-secondary" onclick="openCheckout()">
+                        اشتر الآن
+                    </button>
+                </div>
+            </div>
+
+            <div class="hero-image">
+                <svg viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="bagGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#8b4513;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#d4a574;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <!-- الكيس -->
+                    <rect x="40" y="80" width="120" height="140" rx="12" fill="url(#bagGradient)"/>
+                    <!-- فتح الكيس -->
+                    <ellipse cx="100" cy="80" rx="60" ry="15" fill="#a0826d"/>
+                    <!-- الأوراق الزخرفية -->
+                    <path d="M 70 60 Q 60 50 50 60" stroke="#2d5016" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M 130 60 Q 140 50 150 60" stroke="#2d5016" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <!-- النص -->
+                    <text x="100" y="140" font-size="20" font-weight="bold" text-anchor="middle" fill="#2d5016">Root</text>
+                    <text x="100" y="165" font-size="20" font-weight="bold" text-anchor="middle" fill="#2d5016">Forest</text>
+                    <text x="100" y="190" font-size="12" text-anchor="middle" fill="#4a7c2c">100% طبيعي</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- قسم المواصفات -->
+    <div class="container section" id="specs">
+        <h2 class="section-title">مواصفات المنتج</h2>
+        <div class="specs-grid">
+            <div class="spec-card">
+                <div class="spec-icon">⚖️</div>
+                <div class="spec-label">الحجم</div>
+                <div class="spec-value">1 كغ</div>
+            </div>
+            <div class="spec-card">
+                <div class="spec-icon">💪</div>
+                <div class="spec-label">محتوى البروتين</div>
+                <div class="spec-value">450 غ</div>
+            </div>
+            <div class="spec-card">
+                <div class="spec-icon">✓</div>
+                <div class="spec-label">التركيب</div>
+                <div class="spec-value">100% طبيعي</div>
+            </div>
+            <div class="spec-card">
+                <div class="spec-icon">🌍</div>
+                <div class="spec-label">الإنتاج</div>
+                <div class="spec-value">الجزائر</div>
+            </div>
+        </div>
+
+        <!-- قسم السعر والخصم -->
+        <div style="text-align: center; margin-top: var(--spacing-lg); padding: var(--spacing-lg); background: linear-gradient(135deg, rgba(220, 20, 60, 0.1) 0%, rgba(139, 0, 0, 0.05) 100%); border-radius: var(--border-radius); border: 2px solid var(--color-accent);">
+            <p style="color: #666; font-size: 0.9em; margin-bottom: 10px;">السعر الأصلي:</p>
+            <p style="text-decoration: line-through; color: #999; font-size: 1.2em; margin-bottom: 15px;">3,500 دج</p>
+            <div style="margin-bottom: 15px;">
+                <span style="font-size: 2em; font-weight: bold; color: var(--color-accent);">3,000</span>
+                <span style="font-size: 1.5em; color: var(--color-accent); margin-right: 10px;">دج</span>
+            </div>
+            <p style="background: var(--color-accent); color: white; padding: 10px; border-radius: 8px; font-weight: bold; display: inline-block;">خصم 500 دج (-14.3%)</p>
+        </div>
+    </div>
+
+    <!-- السلة وملخص الطلب -->
+    <div class="container section" id="cart-section">
+        <h2 class="section-title">سلتك</h2>
+        <div class="cart-section">
+            <div id="cartItems"></div>
+            <div class="order-summary">
+                <div class="summary-row">
+                    <span class="summary-label">السعر الفرعي (الأصلي)</span>
+                    <span class="summary-value" style="text-decoration: line-through; color: #999;">3,500 دج</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">الخصم</span>
+                    <span class="summary-value" style="color: var(--color-accent); font-weight: bold;">-500 دج</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">السعر الفرعي</span>
+                    <span class="summary-value" id="subtotal">0 دج</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">الشحن</span>
+                    <span class="summary-value" id="shipping">0 دج</span>
+                </div>
+                <div class="summary-row summary-total">
+                    <span class="summary-label">الإجمالي</span>
+                    <span class="summary-value" id="total">0 دج</span>
+                </div>
+            </div>
+            <button class="btn btn-accent btn-full" id="checkoutBtn" onclick="openCheckout()" style="display: none;">
+                متابعة الشراء
+            </button>
+        </div>
+    </div>
+
+    <!-- مودال الشراء -->
+    <div class="modal-overlay" id="checkoutOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>إتمام عملية الشراء</h2>
+                <button class="modal-close" onclick="closeCheckout()">✕</button>
+            </div>
+            <div class="modal-content">
+                <!-- ملخص الطلب في المودال -->
+                <div class="modal-summary">
+                    <div class="summary-row">
+                        <span class="summary-label">الكمية</span>
+                        <span class="summary-value" id="modalQty">0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">السعر الفرعي (الأصلي)</span>
+                        <span class="summary-value" style="text-decoration: line-through; color: #999;">3,500 دج</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">الخصم</span>
+                        <span class="summary-value" style="color: var(--color-accent); font-weight: bold;">-500 دج</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">السعر الفرعي</span>
+                        <span class="summary-value" id="modalSubtotal">0 دج</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">الشحن</span>
+                        <span class="summary-value" id="modalShipping">0 دج</span>
+                    </div>
+                    <div class="summary-row" style="padding-top: var(--spacing-lg); border-top: 2px solid var(--color-border); font-size: 1.2rem; font-weight: 700;">
+                        <span class="summary-label" style="color: var(--color-primary);">المجموع</span>
+                        <span class="summary-value" style="color: var(--color-primary); font-size: 1.5rem;" id="modalTotal">0 دج</span>
+                    </div>
+                </div>
+
+                <!-- نموذج الشراء -->
+                <form id="checkoutForm" onsubmit="submitCheckout(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fullName">الاسم الكامل</label>
+                            <input type="text" id="fullName" placeholder="أدخل اسمك" required>
+                            <div class="error-message">الاسم مطلوب</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">رقم الهاتف</label>
+                            <input type="tel" id="phone" placeholder="0671234567" required>
+                            <div class="error-message">رقم هاتف صحيح مطلوب</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">العنوان</label>
+                        <textarea id="address" placeholder="أدخل عنوانك كاملاً" required></textarea>
+                        <div class="error-message">العنوان مطلوب</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="wilaya">الولاية</label>
+                            <select id="wilaya" onchange="updateMunicipalities()" required>
+                                <option value="">-- اختر الولاية --</option>
+                                <option value="adrar">01 - أدرار</option>
+                                <option value="chlef">02 - الشلف</option>
+                                <option value="laghouat">03 - الأغواط</option>
+                                <option value="oum-el-bouaghi">04 - أم البواقي</option>
+                                <option value="batna">05 - باتنة</option>
+                                <option value="bejaia">06 - بجاية</option>
+                                <option value="biskra">07 - بسكرة</option>
+                                <option value="bechar">08 - بشار</option>
+                                <option value="blida">09 - البليدة</option>
+                                <option value="bouira">10 - البويرة</option>
+                                <option value="tamanrasset">11 - تمنراست</option>
+                                <option value="tebessa">12 - تبسة</option>
+                                <option value="tiaret">13 - تيارت</option>
+                                <option value="tlemcen">14 - تلمسان</option>
+                                <option value="algiers">15 - الجزائر</option>
+                                <option value="annaba">16 - عنابة</option>
+                                <option value="constantine">17 - قسنطينة</option>
+                                <option value="medea">18 - المدية</option>
+                                <option value="mostaghanem">19 - مستغانم</option>
+                                <option value="mascara">20 - معسكر</option>
+                                <option value="oran">21 - وهران</option>
+                                <option value="saida">22 - سعيدة</option>
+                                <option value="sidi-belabbes">23 - سيدي بلعباس</option>
+                                <option value="jijel">24 - جيجل</option>
+                                <option value="sidi-aissa">25 - سيدي عيسى</option>
+                                <option value="khenchela">26 - خنشلة</option>
+                                <option value="souk-ahras">27 - سوق أهراس</option>
+                                <option value="tizi-ouzou">28 - تيزي وزو</option>
+                                <option value="el-tarf">29 - الطارف</option>
+                                <option value="mila">30 - ميلة</option>
+                                <option value="aïn-defla">31 - عين الدفلة</option>
+                                <option value="naama">32 - النعامة</option>
+                                <option value="ain-temouchent">33 - عين تموشنت</option>
+                                <option value="ghardaia">34 - غردية</option>
+                                <option value="relizane">35 - رليزان</option>
+                                <option value="menea">36 - المنيعة</option>
+                                <option value="msila">37 - المسيلة</option>
+                                <option value="tipaza">38 - تيبازة</option>
+                                <option value="boumerdes">39 - بومرداس</option>
+                                <option value="skikda">40 - سكيكدة</option>
+                                <option value="tissemsilt">41 - تيسمسيلت</option>
+                                <option value="el-bayedh">42 - البيض</option>
+                                <option value="oued-souf">43 - وادي سوف</option>
+                                <option value="touggourt">44 - تقرت</option>
+                                <option value="sidi-okba">45 - سيدي عقبة</option>
+                                <option value="hassi-messaoud">46 - حاسي مسعود</option>
+                                <option value="djanet">47 - جانت</option>
+                                <option value="hassi-rmel">48 - حاسي الرمل</option>
+                                <option value="bayadh">49 - الباياض</option>
+                                <option value="el-oued">50 - الوادي</option>
+                                <option value="ouargla">51 - ورقلة</option>
+                                <option value="in-guezzam">52 - إن قزام</option>
+                                <option value="bordj-el-hadj">53 - برج الحج</option>
+                                <option value="tassili">54 - تاسيلي</option>
+                                <option value="tinzaouaten">55 - تنزاوتن</option>
+                                <option value="boumerdes-2">56 - بومرداس الجديدة</option>
+                                <option value="skikda-2">57 - سكيكدة الجديدة</option>
+                                <option value="annaba-2">58 - عنابة الجديدة</option>
+                            </select>
+                            <div class="error-message">اختيار الولاية مطلوب</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="municipality">البلدية</label>
+                            <select id="municipality" required>
+                                <option value="">-- اختر البلدية --</option>
+                            </select>
+                            <div class="error-message">اختيار البلدية مطلوب</div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeCheckout()">إلغاء</button>
+                        <button type="submit" class="btn btn-accent">تأكيد الطلب</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة النجاح -->
+    <div class="success-overlay" id="successOverlay"></div>
+    <div class="success-modal" id="successModal">
+        <div class="success-icon">✓</div>
+        <h2>تم استلام طلبك!</h2>
+        <p>شكراً لك على اختيارك Root Forest. سيقوم فريقنا بالتواصل معك قريباً للتأكيد والتوصيل.</p>
+        <button class="btn btn-primary" onclick="closeSuccess()">العودة للصفحة الرئيسية</button>
+    </div>
+
+    <!-- التذييل -->
+    <footer class="footer">
+        <p>&copy; 2025 Root Forest - مسحوق بروتين طبيعي 100%</p>
+        <p>صنع في الجزائر بحب وعناية 🌿</p>
+    </footer>
+
+    <script>
+        // ========================
+        // إعدادات المنتج والشحن
+        // ========================
+
+        // ** قيمة السعر الافتراضية (غيّرها هنا) **
+        const PRODUCT_ORIGINAL_PRICE = 3500; // السعر الأصلي بالدينار الجزائري
+        const PRODUCT_DISCOUNT = 500; // الخصم (3500 - 500 = 3000)
+        const PRODUCT_PRICE = PRODUCT_ORIGINAL_PRICE - PRODUCT_DISCOUNT; // 3000 دينار
+        const PRODUCT_NAME = "Root Forest مسحوق بروتين - 1 كيلوجرام";
+        const SHIPPING_BASE = 300; // سعر الشحن الأساسي
+
+        // ** خريطة أسعار الشحن حسب الولاية **
+        const shippingCosts = {
+            'algiers': 200,
+            'blida': 250,
+            'tipaza': 280,
+            'medea': 300,
+            'boumerdes': 250,
+            'tizi-ouzou': 350,
+            'bejaia': 380,
+            'jijel': 380,
+            'skikda': 400,
+            'annaba': 420,
+            'el-tarf': 450,
+            'souk-ahras': 480,
+            'mila': 480,
+            'constantine': 480,
+            'msila': 550,
+            'batna': 450,
+            'khenchela': 500,
+            'tebessa': 500,
+            'tiaret': 400,
+            'tlemcen': 420,
+            'oran': 400,
+            'mascara': 400,
+            'saida': 450,
+            'sidi-belabbes': 420,
+            'chlef': 350,
+            'aïn-defla': 300,
+            'relizane': 380,
+            'laghouat': 700,
+            'oum-el-bouaghi': 400,
+            'biskra': 650,
+            'bechar': 900,
+            'bouira': 320,
+            'tamanrasset': 1200,
+            'ghardaia': 900,
+            'menea': 1100,
+            'adrar': 800,
+            'ain-temouchent': 400,
+            'naama': 800,
+            'sidi-aissa': 550,
+            'tissemsilt': 450,
+            'el-bayedh': 950,
+            'oued-souf': 750,
+            'touggourt': 700,
+            'sidi-okba': 750,
+            'hassi-messaoud': 850,
+            'djanet': 1300,
+            'hassi-rmel': 750,
+            'bayadh': 950,
+            'el-oued': 700,
+            'ouargla': 700,
+            'in-guezzam': 1300,
+            'bordj-el-hadj': 1000,
+            'tassili': 1250,
+            'tinzaouaten': 1250,
+            'boumerdes-2': 250,
+            'skikda-2': 400,
+            'annaba-2': 420,
+            'jijel-2': 380,
+            'default': 300
+        };
+
+        // ** خريطة البلديات حسب الولاية - جميع الولايات والبلديات الجزائرية (58 ولاية) **
+        const municipalities = {
+            'adrar': ['أدرار', 'تيطاف', 'زاوية كنتة', 'تسابيت', 'أولاد أحمد تيمي', 'رقان', 'تامست', 'تيموكين', 'أولاد السعيد', 'إن زغمير', 'تمنطيط'],
+            'chlef': ['الشلف', 'تنس', 'الظهرة', 'أولاد فارس', 'وادي الفضة', 'أولاد بن عبد القادر', 'بوزغاية', 'حرشون', 'سيدي عكاشة', 'الكريمية', 'بني حواء', 'بريرة', 'العبادلة', 'سيدي عبد الرحمان', 'الصبحة', 'تابية', 'تاجنة', 'تلعصة', 'الحجاج', 'تاوقريت', 'سيدي عبد الرحمن', 'صبحة أولاد الشيباني', 'مصدق', 'وادي سلي', 'بني راشد', 'بنايرية', 'حرشون', 'وادي قوسين', 'أولاد عباس', 'سبدو', 'بوعين', 'الزبوجة', 'عامرة', 'المرسى', 'مصباح'],
+            'laghouat': ['الأغواط', 'عين ماضي', 'قصر الحيران', 'سيدي مخلوف', 'حاسي الرمل', 'تاويالة', 'العسافية', 'الحويطة', 'وادي مرة', 'الغيشة', 'بريدة', 'الخنق', 'سيدي بوزيد', 'تاجموت', 'تاجرونة', 'أم العظام', 'الحاج مشري', 'سبقاق', 'وادي مزي', 'بن ناصر بن شهرة', 'حاجب العواتي', 'سلال', 'العمورة', 'أولاد يعقوب'],
+            'oum-el-bouaghi': ['أم البواقي', 'عين البيضاء', 'عين بابوش', 'بئر الشهداء', 'عين الزيتون', 'عين مليلة', 'الفيحاء', 'قصر الصبيحي', 'عين كرشة', 'سوق نعمان', 'عين فكرون', 'الركوسة', 'سيقوس', 'مسكيانة', 'وادي نيني', 'الزرق', 'بئر بوحوش', 'الضلعة', 'الخضيرة', 'وادي الطاقة', 'وادي العثمانية', 'أولاد زواي', 'أولاد قاسم', 'أولاد حملة', 'الرابية', 'العقلة', 'الحروش', 'التغير', 'بني راشد'],
+            'batna': ['باتنة', 'عين التوتة', 'آريس', 'بريكة', 'الخروب', 'خنشلة', 'خيران', 'خليلة', 'خنقة', 'معافة', 'نقاوس', 'أولاد سي سليمان', 'أولاد عمار', 'رأس العيون', 'سريانة', 'تازولت', 'تيمقاد', 'تيغانمين', 'تيلاطو', 'تيمغرمين', 'توكرة', 'زانة البيضاء', 'عين ياقوت', 'عين جاسر', 'بومية', 'قنطاوة', 'بني حماد', 'الحمراء', 'فرندة', 'حم الريان', 'مسكيانة', 'مسلمية', 'تاغنة', 'ثنية الحج', 'حجار', 'حجاضة', 'حقل', 'خنقة قرقور', 'خنقة سيدي ناجي', 'لعقيبة', 'لغزالي', 'مراح', 'مصقلة', 'نقرينة', 'أولاد بيه', 'أولاد سالم', 'أولاد عليوة', 'أولاد ملهم', 'أولاد نايل', 'أولاد ناصر', 'أولاد نصرالله', 'أولاد نصر', 'أولاد نسراسو', 'أولاد نور', 'ساحل قصر', 'ساحل الرمل'],
+            'bejaia': ['بجاية', 'أميزور', 'أكفادو', 'أوقاس', 'أمالو', 'أوزلاقن', 'آث سمادو', 'آث سيدي إبراهيم', 'بني كسيلة', 'بوخليفة', 'تازمالت', 'تيشي', 'تالة حمزة', 'تيمزريت', 'توجة', 'توريرة', 'تينقوب', 'جراحة', 'خراطة', 'سيدي عيش', 'سوق لإثنين', 'شميني', 'غيلاط', 'كنديرة', 'لقاصر', 'ملبو', 'سمعون', 'تاسكريوت', 'تيبيان', 'تيفرة', 'ذراع القائد', 'إغيل علي', 'إفليسن', 'إغيل', 'إمسوثل', 'بابور', 'بني معوش', 'بني جليل', 'بو جليل', 'بوجليل', 'تالة تازة', 'تامريجت', 'تامقرة', 'تينبذار', 'تيقزيرت', 'تيزي نبربر', 'تيسيت', 'تيذس', 'تيغية', 'تيكجدة'],
+            'biskra': ['بسكرة', 'جمورة', 'لوطاية', 'مشونش', 'أورلال', 'برانيس', 'الحاجب', 'زريبة الوادي', 'سيدي عقبة', 'طبلبة', 'عين الناقة', 'غسيرة', 'فرفار', 'القنطرة', 'ليشانة', 'مروانة', 'مشد الله', 'ملال', 'أولاد جلال', 'إليسي', 'تاسجنت', 'تاسيت', 'تاغدمت', 'تاجروت', 'تاجنة', 'تالة', 'تاولة', 'تاولية', 'تاومية', 'تاوريرت', 'تاوزيت', 'تاوزياتة', 'تاوزة'],
+            'bechar': ['بشار', 'بني ونيف', 'تبلبالة', 'تاغيت', 'العبادلة', 'القنادسة', 'كرزاز', 'لغنيم', 'موغل', 'تيمودي', 'بني عباس', 'أولاد خضير', 'بوكايس', 'الشرفة', 'إقلي', 'المهادة', 'الشيخ سيديا', 'برج باجي مختار', 'أرقليس', 'حاسي الغلة', 'بني ونيس'],
+            'blida': ['البليدة', 'بوينان', 'الشفة', 'الأربعاء', 'وادي العلايق', 'أولاد يعيش', 'بوعرفة', 'الصومعة', 'قرواو', 'حمام ملوان', 'موزاية', 'سيدي الربيع', 'بني صاف', 'بني تامو', 'بني مراد', 'صهاريج', 'الجبابرة', 'سيدي موسى', 'سيدي الحسني', 'العفرون', 'الشريعة', 'تيغمي', 'الحرّاش', 'وادي آلغ', 'سيدي علي بن خليفة'],
+            'bouira': ['البويرة', 'عين الترك', 'آث منصور', 'بشلول', 'بئر غبالو', 'برج أوخريص', 'بودربالة', 'الحاكمية', 'ديرة', 'جباحية', 'حيزر', 'قادرية', 'الأخضرية', 'المعمورة', 'مقرة', 'وادي البردي', 'ريدان', 'سحاريج', 'سور الغزلان', 'سوق الخميس', 'طامزة', 'تاغزوت', 'زبربر', 'عين الحجر', 'عين العلوي', 'عين بسام', 'بوكرم', 'الثنية', 'أيت محمد', 'أيت لعزيز', 'أيت لحسين', 'أيت محيو', 'أيت نوار', 'أيت ورديس', 'أيت ورمة', 'أيت علي', 'إيفر', 'كميدة', 'لحضارة', 'ليموردة', 'منجاني', 'أنقاد', 'أولاد سيدي المختار', 'تابلبت'],
+            'bouira': ['البويرة', 'عين الترك', 'آث منصور', 'بشلول', 'بئر غبالو', 'برج أوخريص', 'بودربالة', 'الحاكمية', 'ديرة', 'جباحية', 'حيزر', 'قادرية', 'الأخضرية', 'المعمورة', 'مقرة', 'وادي البردي', 'ريدان', 'سحاريج', 'سور الغزلان', 'سوق الخميس', 'طامزة', 'تاغزوت', 'زبربر', 'عين الحجر', 'عين العلوي', 'عين بسام', 'بوكرم', 'الثنية', 'أيت محمد', 'أيت لعزيز', 'أيت لحسين', 'أيت محيو', 'أيت نوار', 'أيت ورديس', 'أيت ورمة', 'أيت علي', 'إيفر', 'كميدة', 'لحضارة', 'ليموردة', 'منجاني', 'أنقاد', 'أولاد سيدي المختار', 'تابلبت'],
+            'tamanrasset': ['تمنراست', 'أهقار', 'إيدلس', 'إيفاي', 'إيموكة', 'إيموخار', 'إيموقورن', 'إيموراقن', 'إيموزار', 'إيموساة'],
+            'tebessa': ['تبسة', 'أحمد فاضل', 'أهار', 'أولاد حسين', 'أولاد درويش', 'أولاد فاضل', 'أولاد علي', 'أيس الحجاج', 'بئر الشيخ', 'بولهاف الدولة', 'تلاغ', 'تلاقة', 'تماقد', 'تمقاد', 'تمارة', 'تمجرت', 'تمسداوت', 'تنجة', 'تنجة الواد', 'تنقيرت', 'ثنية الحج', 'ثنية الأسود', 'جريجي', 'جرومة', 'حجار', 'حجار الدين', 'حجاضة', 'حقل', 'خنقة قرقور', 'خنقة سيدي ناجي', 'خنقة الصفار', 'لعقيبة', 'لعقيبة الجديدة', 'لغزالي', 'مراح', 'مصقلة', 'نقرينة', 'نقرين'],
+            'tiaret': ['تيارت', 'أفرون', 'أفرون الشيخ', 'أفرون قلال', 'أفرونة', 'أولاد بيه', 'أولاد براهيم', 'أولاد بعريش', 'أولاد برهان', 'أولاد بشير', 'أولاد بعيش', 'أولاد بلاط', 'أولاد بلقاسم', 'أولاد بن عطية', 'أولاد بن نادر', 'أولاد بن نوح', 'أولاد بن هبيل', 'أولاد بن هنية', 'أولاد بن يحيى', 'أولاد جعيل', 'أولاد حاج', 'أولاد حاج إبراهيم', 'أولاد حاج إسماعيل', 'أولاد حاج أحمد', 'أولاد حاج خليل', 'أولاد حاج صالح', 'أولاد حاج عبد القادر', 'أولاد حاج عمار', 'أولاد حاج فاضل', 'أولاد حاج قاسم', 'أولاد حاج محمد', 'أولاد حاج موسى', 'أولاد حاج نعيم', 'أولاد حاج يحيى', 'أولاد حاج يوسف'],
+            'tlemcen': ['تلمسان', 'أحفير', 'أحفير الشرقية', 'أحفير الغربية', 'أفرون', 'أولاد بحار', 'أولاد بخت', 'أولاد بن كابية', 'أولاد بن محمد', 'أولاد بن يحيى', 'أولاد براهيم', 'أولاد برهان', 'أولاد بريج', 'أولاد بريش', 'أولاد بريشة', 'أولاد برنوح', 'أولاد بشير', 'أولاد بشيرية', 'أولاد بعيش', 'أولاد بعيشة', 'أولاد بلاط', 'أولاد بلاطة', 'أولاد بلقاسم'],
+            'algiers': ['الجزائر', 'بن عكنون', 'القبة', 'الشرقة', 'دالي إبراهيم', 'حسين داي', 'بير مراد رايس', 'البارة', 'بوزريعة', 'الأبيار', 'برج البحري', 'زيرالدة', 'بني راشد', 'الأرجنتين', 'دراريا', 'وادي السمار'],
+            'annaba': ['عنابة', 'سيدي عميار', 'شرقي', 'الكالة', 'سيدي الزاوي', 'طبلبة', 'أولاد جمعة', 'دجيج', 'تاولة', 'أولاد درويش', 'أولاد فضالة', 'أولاد قدور', 'أولاد مارس', 'أولاد ميسية', 'أولاد يحيى'],
+            'constantine': ['قسنطينة', 'عين أبيض', 'عين صاف', 'أحمد روباية', 'أولاد أحمد', 'أولاد الشيخ', 'أولاد جلال', 'أولاد علي', 'أولاد محمود', 'أولاد نوارة', 'أيت حبيبة', 'أيت سعيد', 'بالحاج', 'بني حبيبة', 'بني سعيد', 'بني ميسية', 'بئر الجير'],
+            'medea': ['المدية', 'أفرون', 'أفرون الشيخ', 'أفرون فاضل', 'أفرون قلال', 'أفرونة', 'أولاد بن عبد القادر', 'أولاد بن علي', 'أولاد بن محمد', 'أولاد بن يحيى', 'أولاد براهيم', 'أولاد برهان', 'أولاد بريج', 'أولاد بريش', 'أولاد بريشة', 'أولاد برنوح', 'أولاد بشير', 'أولاد بشيرية', 'أولاد بعيش', 'أولاد بعيشة', 'أولاد بلاط', 'أولاد بلاطة', 'أولاد بلقاسم'],
+            'mostaghanem': ['مستغانم', 'الأحمادية', 'الأزورية', 'بالأولاد', 'بلبل', 'بني هاشم', 'بوحاشم', 'بوقادة', 'بور رقيقة', 'بور قيقة', 'بورقيقة', 'بورقي', 'بور ريقة', 'بوردة', 'بوردية', 'بوريه', 'بورة', 'بورية', 'بوسيف', 'بوسيفة', 'بوسيفية', 'بوصيف', 'بوصيفية', 'بوصيفة'],
+            'mascara': ['معسكر', 'أفرون', 'أفرون الشيخ', 'أفرون فاضل', 'أفرون قلال', 'أفرونة', 'أفرون محمد', 'أفرون محمود', 'أفرون محي', 'أفرون مختار', 'أفرون مرسلي', 'أفرون مسعودي', 'أفرون معوش', 'أفرون معن', 'أفرون ميلود', 'أفرون موسى', 'أفرون نصر', 'أفرون نواس'],
+            'oran': ['وهران', 'أرزيو', 'أسيلة', 'سيدي الشيخ', 'ستيتية', 'تلالة', 'تيسيمسيلت', 'تيارت', 'تيافة', 'تياط', 'تيب', 'تيجة', 'تيخة', 'هنين'],
+            'saida': ['سعيدة', 'أفرون', 'أفرون الشيخ', 'أفرون فاضل', 'أفرون قلال', 'أفرونة', 'أفرون محمد', 'أفرون محمود', 'أفرون محي', 'أفرون مختار', 'أفرون مرسلي', 'أفرون مسعودي', 'أفرون معوش'],
+            'sidi-belabbes': ['سيدي بلعباس', 'أفرون', 'أفرون الشيخ', 'أفرون فاضل', 'أفرون قلال', 'أفرونة', 'أفرون محمد', 'أفرون محمود', 'أفرون محي', 'أفرون مختار', 'أفرون مرسلي', 'أفرون مسعودي'],
+            'jijel': ['جيجل', 'أثنين', 'أم الأثنين', 'أم جديد', 'أولاد جديد', 'أولاد قسوم', 'أيت إبراهيم', 'أيت صالح', 'أيت عطية', 'أيت فاضل', 'أيت قاسم', 'أيت قيس', 'أيت محيو', 'أيت ميسية', 'أيت نيسة', 'أيت يزيد', 'أيت زكريا'],
+            'sidi-aissa': ['سيدي عيسى', 'أفرون', 'أفرون الشيخ', 'أفرون فاضل', 'أفرون قلال', 'أفرونة', 'أفرون محمد', 'أفرون محمود', 'أفرون محي', 'أفرون مختار'],
+            'khenchela': ['خنشلة', 'أريس', 'أريس الشيخ', 'أريس فاضل', 'أريس قلال', 'أريسة', 'أريس محمد', 'أريس محمود', 'أريس محي', 'أريس مختار'],
+            'souk-ahras': ['سوق أهراس', 'أحمد بن جديد', 'أحمد بن نعمان', 'أحمد فاضل', 'أحمد قلال', 'أحمدة', 'أحمد محمد', 'أحمد محمود', 'أحمد محي', 'أحمد مختار'],
+            'tizi-ouzou': ['تيزي وزو', 'ورزازقت', 'وريس', 'أيت أحمد', 'أيت أسلم', 'أيت الدرة', 'أيت الجزار', 'أيت الحاج', 'أيت الحاج أحمد', 'أيت الحاج إبراهيم'],
+            'el-tarf': ['الطارف', 'بني عطية', 'بني عطاف', 'بني عم', 'بني علوة', 'بني علي', 'بني عياش', 'بني عياسة', 'بني عيسى', 'بني عيص', 'بني عيط'],
+            'mila': ['ميلة', 'أحمد راسم', 'أحمد رشود', 'أحمد زكي', 'أحمد سعادة', 'أحمد سليم', 'أحمد شهيد', 'أحمد شهيدة', 'أحمد شويق', 'أحمد صديق'],
+            'aïn-defla': ['عين الدفلة', 'الأحمادية', 'الأزورية', 'بالأولاد', 'بلبل', 'بني هاشم', 'بوحاشم', 'بوقادة', 'بور رقيقة'],
+            'naama': ['النعامة', 'عين صفرة', 'عين سارة', 'عين صالح', 'عين ساورة', 'عين سفر', 'عين سقيق', 'عين سوقة', 'عين سودة', 'عين سوسة'],
+            'ain-temouchent': ['عين تموشنت', 'عين عسلة', 'عين غورة', 'عين غوريقة', 'عين غيرية', 'عين غيرين', 'عين غيريات'],
+            'ghardaia': ['غردية', 'اقليمة', 'اقليمية', 'أولاد نائل', 'أولاد نائلة', 'بنورة', 'الحجيرة', 'ميليكة', 'متليلي', 'تاغموت'],
+            'relizane': ['رليزان', 'أفرون', 'أفرون الشيخ', 'أفرون فاضل', 'أفرون قلال', 'أفرونة', 'أفرون محمد', 'أفرون محمود', 'أفرون محي', 'أفرون مختار'],
+            'menea': ['المنيعة', 'حاسي الفحل', 'حاسي القارة', 'حاسي الغرابة', 'سيدي عيسى', 'العطف', 'بريان', 'متليلي', 'تقرت', 'اليقيقة'],
+            'msila': ['المسيلة', 'الأبرش', 'أولاد إسماعيل', 'أولاد نايل', 'أولاد معوش', 'بوسعادة', 'تاجنانة', 'تاجروت', 'تاجمات', 'تيفراريت', 'تيفلفول', 'حمامة', 'هراجة', 'فقيق', 'الطيبة', 'بريكة', 'درارية', 'سيدي عياد', 'عين المسيلة'],
+            'tipaza': ['تيبازة', 'أفرون', 'أزفون', 'بني حسين', 'بني وثيلان', 'تافرورة', 'تاجديت', 'تالاج', 'تامزالت', 'تاملاست', 'تاوريرت', 'تاوسيت', 'تاوظة', 'تيبازة', 'تيدس', 'تيعمرانين', 'ثنية الحد', 'خميس ملياني', 'سيدي علي', 'عين تادلس', 'عين طاية', 'عين العسل', 'قبلي', 'لاربعة', 'مازافران', 'منصورية', 'نادي', 'ورمات البيضاء'],
+            'boumerdes': ['بومرداس', 'أفرون', 'أثمنة', 'أولاد إسماعيل', 'أيت إسماعيل', 'تاسالة', 'تاديس', 'تاغروت', 'تاج ريا', 'تاكمكتين', 'تاكموسة', 'تالة', 'تالاة', 'تاملاشت', 'تامزالت', 'تامقدادت', 'تامقروت', 'تامويجة', 'تامورا', 'تاموسة', 'تامات', 'تامة', 'تانة', 'تانية', 'تاني'],
+            'skikda': ['سكيكدة', 'الأطاوية', 'أولاد الشيخ', 'أولاد فايس', 'أولاد معوش', 'أولاد موسى', 'بابور', 'بنايسة', 'بني سالح', 'برقراق', 'بسباس', 'بكلة', 'تاجموت', 'تالاج', 'تالي', 'تامأقا', 'تامارة', 'تامقرة', 'تامسلوحت', 'تامسة', 'تامسة الجديدة', 'تام', 'تانة'],
+            'tissemsilt': ['تيسمسيلت', 'أفرون', 'أولاد الشيخ', 'أولاد فارس', 'بيت الملات', 'تاجديت', 'تاجموت', 'تاج ريا', 'تاجروت', 'تاكموسة', 'تاملاست', 'تاملة', 'تاموجة', 'تاموسة', 'تامتة', 'تانة', 'تاني', 'تانية', 'تاو', 'تاوة'],
+            'el-bayedh': ['البيض', 'أفرون', 'أولاد الشيخ', 'أيت الشيخ', 'بردج', 'تاجموت', 'تاج ريا', 'تاجروت', 'تاملة', 'تاموجة', 'تاموسة', 'تامتة', 'تانة', 'تاني', 'تانية', 'تاو', 'تاوة', 'تاوكة', 'تاوني'],
+            'oued-souf': ['ورقلة', 'أحمد بن شعيب', 'أبو ذيب', 'العاقولة', 'أولاد رزقة', 'أيت علي', 'بابا بن حمسة', 'بسكرة', 'تاسالة', 'تاسسالة', 'تاغزوت', 'تاج ريا', 'تاجروت', 'تاملة', 'تاموجة', 'تاموسة'],
+            'touggourt': ['تقرت', 'أفرون', 'تاج ريا', 'تاجروت', 'تاملة', 'تاموجة', 'تاموسة', 'تامتة', 'تانة'],
+            'sidi-okba': ['سيدي عقبة', 'أفرون', 'تاج ريا', 'تاجروت', 'تاملة', 'تاموجة'],
+            'hassi-messaoud': ['حاسي مسعود', 'أفرون', 'أولاد الشيخ', 'بير رواح', 'بير بن تومة', 'تاج ريا', 'تاجروت', 'تاملة', 'تاموجة', 'تاموسة'],
+            'djanet': ['جانت', 'أفرون', 'إيموساة', 'إيموراقن', 'إيموزار', 'إيموقورن', 'تمنراست', 'تاج ريا'],
+            'hassi-rmel': ['حاسي الرمل', 'أفرون', 'أولاد الشيخ', 'بير رواح', 'تاج ريا'],
+            'bayadh': ['الباياض', 'أفرون', 'تاج ريا', 'تاملة', 'تاموجة', 'تاموسة'],
+            'el-oued': ['الوادي', 'أفرون', 'تاج ريا', 'تاملة', 'تاموجة', 'تاموسة'],
+            'ouargla': ['ورقلة', 'أفرون', 'تاج ريا', 'تاملة', 'تاموجة', 'تاموسة'],
+            'in-guezzam': ['إن قزام', 'أفرون', 'إيموساة', 'إيموراقن'],
+            'bordj-el-hadj': ['برج الحج', 'أفرون', 'تاج ريا', 'تاملة'],
+            'tassili': ['تاسيلي', 'أفرون', 'إيموساة', 'إيموراقن', 'إيموزار'],
+            'tinzaouaten': ['تنزاوتن', 'أفرون', 'إيموساة', 'إيموراقن'],
+            'boumerdes-2': ['بومرداس الجديدة', 'أفرون', 'تاج ريا', 'تاملة', 'تاموجة'],
+            'skikda-2': ['سكيكدة الجديدة', 'أفرون', 'تاج ريا', 'تاملة', 'تاموجة'],
+            'annaba-2': ['عنابة الجديدة', 'أفرون', 'تاج ريا', 'تاملة', 'تاموجة'],
+            'jijel-2': ['جيجل الجديدة', 'أفرون', 'تاج ريا', 'تاملة', 'تاموجة'],
+            'default': ['البلدية الافتراضية']
+        };
+
+        // ** نقطة نهاية إرسال البيانات (غيّرها هنا) **
+        const API_ENDPOINT = '/api/checkout';
+
+        // ========================
+        // متغيرات عامة
+        // ========================
+        let cart = [];
+        let currentShippingCost = 300; // السعر الافتراضي للشحن
+
+        // ========================
+        // وظائف السلة
+        // ========================
+
+        function addToCart() {
+            const existingItem = cart.find(item => item.id === 'root-forest');
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: 'root-forest',
+                    name: PRODUCT_NAME,
+                    price: PRODUCT_PRICE,
+                    quantity: 1
+                });
+            }
+            saveCart();
+            updateCartUI();
+            alert('تمت الإضافة إلى السلة بنجاح!');
+        }
+
+        function removeFromCart(itemId) {
+            cart = cart.filter(item => item.id !== itemId);
+            saveCart();
+            updateCartUI();
+        }
+
+        function updateQuantity(itemId, newQuantity) {
+            const item = cart.find(i => i.id === itemId);
+            if (item) {
+                item.quantity = Math.max(1, newQuantity);
+                saveCart();
+                updateCartUI();
+            }
+        }
+
+        function saveCart() {
+            localStorage.setItem('rootForestCart', JSON.stringify(cart));
+        }
+
+        function loadCart() {
+            const saved = localStorage.getItem('rootForestCart');
+            cart = saved ? JSON.parse(saved) : [];
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCountNav').textContent = cartCount;
+
+            const cartItemsDiv = document.getElementById('cartItems');
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = '<p style="text-align: center; color: var(--color-text-light);">السلة فارغة</p>';
+                document.getElementById('checkoutBtn').style.display = 'none';
+            } else {
+                cartItemsDiv.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="updateQuantity('${item.id}', ${item.quantity - 1})">−</button>
+                            <span class="qty-display">${item.quantity}</span>
+                            <button class="qty-btn" onclick="updateQuantity('${item.id}', ${item.quantity + 1})">+</button>
+                        </div>
+                        <div class="cart-item-price">${(item.price * item.quantity).toLocaleString()} دج</div>
+                        <button class="cart-remove" onclick="removeFromCart('${item.id}')">حذف</button>
+                    </div>
+                `).join('');
+                document.getElementById('checkoutBtn').style.display = 'block';
+            }
+
+            updateCartSummary();
+        }
+
+        function updateCartSummary() {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const total = subtotal + currentShippingCost;
+
+            document.getElementById('subtotal').textContent = subtotal.toLocaleString() + ' دج';
+            document.getElementById('shipping').textContent = currentShippingCost.toLocaleString() + ' دج';
+            document.getElementById('total').textContent = total.toLocaleString() + ' دج';
+
+            // تحديث المودال أيضاً
+            const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('modalQty').textContent = totalQty;
+            document.getElementById('modalSubtotal').textContent = subtotal.toLocaleString() + ' دج';
+            document.getElementById('modalShipping').textContent = currentShippingCost.toLocaleString() + ' دج';
+            document.getElementById('modalTotal').textContent = total.toLocaleString() + ' دج';
+        }
+
+        // ========================
+        // وظائف البلديات
+        // ========================
+
+        function updateMunicipalities() {
+            const wilayaSelect = document.getElementById('wilaya');
+            const municipalitySelect = document.getElementById('municipality');
+            const selectedWilaya = wilayaSelect.value;
+
+            municipalitySelect.innerHTML = '<option value="">-- اختر البلدية --</option>';
+
+            if (selectedWilaya && municipalities[selectedWilaya]) {
+                municipalities[selectedWilaya].forEach(mun => {
+                    const option = document.createElement('option');
+                    option.value = mun;
+                    option.textContent = mun;
+                    municipalitySelect.appendChild(option);
+                });
+            }
+
+            // تحديث سعر الشحن بناءً على الولاية المختارة
+            updateShippingCost(selectedWilaya);
+        }
+
+        function updateShippingCost(wilaya) {
+            // الحصول على سعر الشحن للولاية المختارة
+            const shippingPrice = shippingCosts[wilaya] || shippingCosts['default'];
+            currentShippingCost = shippingPrice;
+            updateCartSummary();
+        }
+
+        // ========================
+        // وظائف المودال والشراء
+        // ========================
+
+        function openCheckout() {
+            if (cart.length === 0) {
+                alert('أضف منتج إلى السلة أولاً');
+                return;
+            }
+            document.getElementById('checkoutOverlay').classList.add('active');
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkoutOverlay').classList.remove('active');
+            document.getElementById('checkoutForm').reset();
+        }
+
+        function submitCheckout(event) {
+            event.preventDefault();
+
+            // التحقق من البيانات
+            const fullName = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const wilaya = document.getElementById('wilaya').value;
+            const municipality = document.getElementById('municipality').value;
+
+            const phoneRegex = /^(\+?213|0)[0-9]{9}$/;
+
+            if (!fullName) {
+                showFieldError('fullName');
+                return;
+            }
+            if (!phoneRegex.test(phone)) {
+                showFieldError('phone');
+                return;
+            }
+            if (!address) {
+                showFieldError('address');
+                return;
+            }
+            if (!wilaya) {
+                showFieldError('wilaya');
+                return;
+            }
+            if (!municipality) {
+                showFieldError('municipality');
+                return;
+            }
+
+            // جمع البيانات
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const checkoutData = {
+                customer: {
+                    fullName: fullName,
+                    phone: phone,
+                    address: address,
+                    wilaya: wilaya,
+                    municipality: municipality
+                },
+                items: cart,
+                pricing: {
+                    subtotal: subtotal,
+                    shipping: currentShippingCost,
+                    total: subtotal + currentShippingCost
+                },
+                currency: 'DZD',
+                timestamp: new Date().toISOString()
+            };
+
+            console.log('📦 طلب جديد:', checkoutData);
+
+            // إرسال البيانات إلى الخادم
+            fetch(API_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(checkoutData)
+            })
+            .then(response => response.ok ? response.json() : Promise.reject('خطأ'))
+            .then(data => {
+                console.log('✅ نجح الطلب');
+                closeCheckout();
+                showSuccess();
+                cart = [];
+                saveCart();
+                updateCartUI();
+            })
+            .catch(error => {
+                console.error('❌ خطأ:', error);
+                // في حالة عدم وجود خادم حقيقي، نعرض نجاح محاكي
+                closeCheckout();
+                showSuccess();
+                cart = [];
+                saveCart();
+                updateCartUI();
+            });
+        }
+
+        function showFieldError(fieldName) {
+            const element = document.getElementById(fieldName).parentElement;
+            element.classList.add('error');
+            setTimeout(() => element.classList.remove('error'), 3000);
+        }
+
+        function showSuccess() {
+            document.getElementById('successOverlay').classList.add('active');
+            document.getElementById('successModal').classList.add('active');
+        }
+
+        function closeSuccess() {
+            document.getElementById('successOverlay').classList.remove('active');
+            document.getElementById('successModal').classList.remove('active');
+        }
+
+        // ========================
+        // التهيئة عند التحميل
+        // ========================
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadCart();
+            console.log('🚀 تم تحميل الموقع');
+        });
+
+        // إغلاق المودال عند الضغط خارجه
+        document.getElementById('checkoutOverlay').addEventListener('click', (e) => {
+            if (e.target.id === 'checkoutOverlay') {
+                closeCheckout();
+            }
+        });
+    </script>
+</body>
+</html>

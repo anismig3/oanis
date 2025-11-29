@@ -1,0 +1,38 @@
+{
+  "name": "root-forest-api",
+  "version": "1.0.0",
+  "description": "API Server for Root Forest - Natural Protein Powder",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "root-forest",
+    "protein",
+    "algeria",
+    "api",
+    "e-commerce"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.2"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "your-repo-url"
+  },
+  "bugs": {
+    "url": "your-repo-url/issues"
+  },
+  "homepage": "your-website-url"
+}

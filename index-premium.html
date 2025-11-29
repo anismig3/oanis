@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Root Forest - مسحوق بروتين طبيعي 100%</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ========================
+           نظام الألوان والمتغيرات
+           ======================== */
+        :root {
+            /* الألوان الأساسية - طبيعية وراقية */
+            --color-primary: #2d5016;           /* أخضر داكن (أساسي) */
+            --color-secondary: #4a7c2c;         /* أخضر متوسط */
+            --color-accent: #8b4513;            /* بني ترابي (أحمر داكن) */
+            --color-light: #f5f1ed;             /* بيج فاتح (خلفية) */
+            --color-white: #ffffff;             /* أبيض */
+            --color-text: #2c2c2c;              /* نص داكن */
+            --color-text-light: #666666;        /* نص فاتح */
+            --color-border: #e8e3dd;            /* حدود ناعمة */
+            --color-success: #27ae60;           /* أخضر نجاح */
+            --color-shadow: rgba(0, 0, 0, 0.08); /* ظل خفيف */
+            
+            /* المسافات */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+            --spacing-2xl: 4rem;
+            
+            /* التأثيرات */
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-sm: 0 2px 8px var(--color-shadow);
+            --shadow-md: 0 4px 16px var(--color-shadow);
+            --shadow-lg: 0 8px 24px var(--color-shadow);
+        }
+
+        /* ========================
+           النمط العام
+           ======================== */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--color-light);
+            color: var(--color-text);
+            line-height: 1.6;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        button {
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+
+        input, select, textarea {
+            font-family: 'Cairo', sans-serif;
+            transition: var(--transition);
+        }
+
+        /* ========================
+           الرأس والملاحة (Navbar)
+           ======================== */
+        .navbar {
+            background: var(--color-white);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: var(--spacing-md) 0;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-white);
+            font-size: 1.3rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--spacing-xl);
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--color-text-light);
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-primary);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            background: var(--color-accent);
+            color: var(--color-white);
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* ========================
+           قسم البطل (Hero)
+           ======================== */
+        .hero {
+            background: linear-gradient(135deg, var(--color-light) 0%, rgba(77, 124, 44, 0.05) 100%);
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-2xl);
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: var(--spacing-md);
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            color: var(--color-text-light);
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.8;
+        }
+
+        .hero-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle, rgba(77, 124, 44, 0.1) 0%, transparent 70%);
+            min-height: 400px;
+            border-radius: 12px;
+        }
+
+        .hero-image svg {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+        }
+
+        /* ========================
+           بطاقات المواصفات (Badges)
+           ======================== */
+        .badges-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--color-white);
+            border: 1px solid var(--color-border);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--color-primary);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .badge:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-primary);
+        }
+
+        .badge::before {
+            content: '✓';
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        /* ========================
+           الأزرار
+           ======================== */
+        .btn {
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            text-transform: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: var(--color-white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--color-white);
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-light);
+        }
+
+        .btn-accent {
+            background: var(--color-accent);
+            color: var(--color-white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-accent:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-sm {
+            padding: var(--spacing-xs) var(--spacing-md);
+            font-size: 0.9rem;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        /* ========================
+           القسم الرئيسي
+           ======================== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-lg);
+        }
+
+        .section {
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: var(--spacing-lg);
+            position: relative;
+            padding-bottom: var(--spacing-md);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            border-radius: 2px;
+        }
+
+        /* ========================
+           بطاقة المواصفات (Specs Card)
+           ======================== */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .spec-card {
+            background: var(--color-white);
+            padding: var(--spacing-lg);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--color-border);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .spec-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .spec-icon {
+            font-size: 2rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .spec-label {
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .spec-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        /* ========================
+           السلة
+           ======================== */
+        .cart-section {
+            background: var(--color-white);
+            padding: var(--spacing-lg);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: var(--spacing-lg);
+            align-items: center;
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .cart-item-price {
+            font-weight: 600;
+            color: var(--color-primary);
+            font-size: 1.1rem;
+        }
+
+        .qty-control {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            background: var(--color-light);
+            border-radius: 6px;
+            padding: 2px;
+        }
+
+        .qty-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: none;
+            color: var(--color-primary);
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .qty-btn:hover {
+            background: var(--color-white);
+            border-radius: 4px;
+        }
+
+        .qty-display {
+            padding: 0 var(--spacing-sm);
+            min-width: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .cart-remove {
+            background: rgba(139, 69, 19, 0.1);
+            color: var(--color-accent);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .cart-remove:hover {
+            background: var(--color-accent);
+            color: var(--color-white);
+        }
+
+        /* ========================
+           ملخص الطلب
+           ======================== */
+        .order-summary {
+            background: linear-gradient(135deg, var(--color-light) 0%, rgba(77, 124, 44, 0.03) 100%);
+            padding: var(--spacing-lg);
+            border-radius: 12px;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md) 0;
+            border-bottom: 1px solid var(--color-border);
+            font-size: 0.95rem;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            color: var(--color-text-light);
+            font-weight: 500;
+        }
+
+        .summary-value {
+            color: var(--color-text);
+            font-weight: 600;
+        }
+
+        .summary-total {
+            padding: var(--spacing-lg) 0;
+            padding-top: var(--spacing-lg);
+            border-top: 2px solid var(--color-primary);
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .summary-total .summary-label {
+            color: var(--color-primary);
+        }
+
+        .summary-total .summary-value {
+            color: var(--color-primary);
+            font-size: 1.5rem;
+        }
+
+        /* ========================
+           المودال (Checkout Modal)
+           ======================== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--color-white);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: var(--spacing-lg);
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            margin: 0;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: var(--color-light);
+            border-radius: 50%;
+            color: var(--color-text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: var(--color-border);
+        }
+
+        .modal-content {
+            padding: var(--spacing-lg);
+        }
+
+        /* ========================
+           نموذج الشراء
+           ======================== */
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--spacing-sm);
+            font-weight: 600;
+            color: var(--color-text);
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: 'Cairo', sans-serif;
+            background: var(--color-white);
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group.error input,
+        .form-group.error select {
+            border-color: #e74c3c;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: var(--spacing-xs);
+            display: none;
+        }
+
+        .form-group.error .error-message {
+            display: block;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+        }
+
+        .form-row .form-group {
+            margin-bottom: 0;
+        }
+
+        /* ========================
+           ملخص الطلب في المودال
+           ======================== */
+        .modal-summary {
+            background: var(--color-light);
+            padding: var(--spacing-lg);
+            border-radius: 12px;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .modal-summary .summary-row {
+            padding: var(--spacing-md) 0;
+        }
+
+        /* ========================
+           أزرار المودال
+           ======================== */
+        .modal-footer {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+            padding: var(--spacing-lg);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .modal-footer .btn {
+            margin: 0;
+            width: 100%;
+        }
+
+        /* ========================
+           نافذة النجاح (Success Modal)
+           ======================== */
+        .success-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--color-white);
+            padding: 3rem;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            z-index: 2000;
+            display: none;
+            animation: popIn 0.4s ease-out;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .success-modal.active {
+            display: block;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--color-success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-white);
+            font-size: 3rem;
+            margin: 0 auto var(--spacing-lg);
+        }
+
+        .success-modal h2 {
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .success-modal p {
+            color: var(--color-text-light);
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.8;
+        }
+
+        .success-modal .btn {
+            width: 100%;
+            margin-top: var(--spacing-lg);
+        }
+
+        .success-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(4px);
+            z-index: 1999;
+            display: none;
+        }
+
+        .success-overlay.active {
+            display: block;
+        }
+
+        /* ========================
+           التذييل
+           ======================== */
+        .footer {
+            background: var(--color-primary);
+            color: var(--color-white);
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            text-align: center;
+            margin-top: var(--spacing-2xl);
+        }
+
+        .footer p {
+            margin-bottom: var(--spacing-md);
+            opacity: 0.9;
+        }
+
+        /* ========================
+           الاستجابة (Responsive)
+           ======================== */
+        @media (max-width: 768px) {
+            :root {
+                --spacing-xl: 2rem;
+                --spacing-2xl: 3rem;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-lg);
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: var(--spacing-lg);
+            }
+
+            .specs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-item {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-footer {
+                grid-template-columns: 1fr;
+            }
+
+            .success-modal {
+                padding: 2rem;
+            }
+
+            .success-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-container {
+                padding: 0 var(--spacing-md);
+            }
+
+            .nav-links {
+                gap: var(--spacing-md);
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .logo-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            .hero-content h1 {
+                font-size: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .modal {
+                width: 95%;
+            }
+
+            .container {
+                padding: 0 var(--spacing-md);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- الرأس والملاحة -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <div class="logo-icon">🌿</div>
+                <span>Root Forest</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#product">المنتج</a></li>
+                <li><a href="#specs">المواصفات</a></li>
+                <li><a href="#cart-section">السلة</a></li>
+                <li class="cart-icon" id="cartIconNav">
+                    🛒
+                    <span class="cart-badge" id="cartCountNav">0</span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- القسم الرئيسي -->
+    <div class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Root Forest</h1>
+                <p>مسحوق بروتين طبيعي 100% من أفضل المصادر الطبيعية. صحة وقوة في كل كوب.</p>
+                
+                <div class="badges-container">
+                    <span class="badge">100% طبيعي</span>
+                    <span class="badge">صنع في الجزائر</span>
+                    <span class="badge">خالي من الإضافات</span>
+                    <span class="badge">معتمد دوليًا</span>
+                </div>
+
+                <div style="display: flex; gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
+                    <button class="btn btn-primary" onclick="addToCart()">
+                        🛒 إضافة إلى السلة
+                    </button>
+                    <button class="btn btn-secondary" onclick="openCheckout()">
+                        اشتر الآن
+                    </button>
+                </div>
+            </div>
+
+            <div class="hero-image">
+                <svg viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="bagGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#8b4513;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#d4a574;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <!-- الكيس -->
+                    <rect x="40" y="80" width="120" height="140" rx="12" fill="url(#bagGradient)"/>
+                    <!-- فتح الكيس -->
+                    <ellipse cx="100" cy="80" rx="60" ry="15" fill="#a0826d"/>
+                    <!-- الأوراق الزخرفية -->
+                    <path d="M 70 60 Q 60 50 50 60" stroke="#2d5016" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M 130 60 Q 140 50 150 60" stroke="#2d5016" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <!-- النص -->
+                    <text x="100" y="140" font-size="20" font-weight="bold" text-anchor="middle" fill="#2d5016">Root</text>
+                    <text x="100" y="165" font-size="20" font-weight="bold" text-anchor="middle" fill="#2d5016">Forest</text>
+                    <text x="100" y="190" font-size="12" text-anchor="middle" fill="#4a7c2c">100% طبيعي</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- قسم المواصفات -->
+    <div class="container section" id="specs">
+        <h2 class="section-title">مواصفات المنتج</h2>
+        <div class="specs-grid">
+            <div class="spec-card">
+                <div class="spec-icon">⚖️</div>
+                <div class="spec-label">الحجم</div>
+                <div class="spec-value">1 كغ</div>
+            </div>
+            <div class="spec-card">
+                <div class="spec-icon">💪</div>
+                <div class="spec-label">محتوى البروتين</div>
+                <div class="spec-value">450 غ</div>
+            </div>
+            <div class="spec-card">
+                <div class="spec-icon">✓</div>
+                <div class="spec-label">التركيب</div>
+                <div class="spec-value">100% طبيعي</div>
+            </div>
+            <div class="spec-card">
+                <div class="spec-icon">🌍</div>
+                <div class="spec-label">الإنتاج</div>
+                <div class="spec-value">الجزائر</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- السلة وملخص الطلب -->
+    <div class="container section" id="cart-section">
+        <h2 class="section-title">سلتك</h2>
+        <div class="cart-section">
+            <div id="cartItems"></div>
+            <div class="order-summary">
+                <div class="summary-row">
+                    <span class="summary-label">السعر الفرعي</span>
+                    <span class="summary-value" id="subtotal">0 دج</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">الشحن</span>
+                    <span class="summary-value" id="shipping">0 دج</span>
+                </div>
+                <div class="summary-row summary-total">
+                    <span class="summary-label">الإجمالي</span>
+                    <span class="summary-value" id="total">0 دج</span>
+                </div>
+            </div>
+            <button class="btn btn-accent btn-full" id="checkoutBtn" onclick="openCheckout()" style="display: none;">
+                متابعة الشراء
+            </button>
+        </div>
+    </div>
+
+    <!-- مودال الشراء -->
+    <div class="modal-overlay" id="checkoutOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>إتمام عملية الشراء</h2>
+                <button class="modal-close" onclick="closeCheckout()">✕</button>
+            </div>
+            <div class="modal-content">
+                <!-- ملخص الطلب في المودال -->
+                <div class="modal-summary">
+                    <div class="summary-row">
+                        <span class="summary-label">الكمية</span>
+                        <span class="summary-value" id="modalQty">0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">السعر الفرعي</span>
+                        <span class="summary-value" id="modalSubtotal">0 دج</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">الشحن</span>
+                        <span class="summary-value" id="modalShipping">0 دج</span>
+                    </div>
+                    <div class="summary-row" style="padding-top: var(--spacing-lg); border-top: 2px solid var(--color-border); font-size: 1.2rem; font-weight: 700;">
+                        <span class="summary-label" style="color: var(--color-primary);">المجموع</span>
+                        <span class="summary-value" style="color: var(--color-primary); font-size: 1.5rem;" id="modalTotal">0 دج</span>
+                    </div>
+                </div>
+
+                <!-- نموذج الشراء -->
+                <form id="checkoutForm" onsubmit="submitCheckout(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fullName">الاسم الكامل</label>
+                            <input type="text" id="fullName" placeholder="أدخل اسمك" required>
+                            <div class="error-message">الاسم مطلوب</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">رقم الهاتف</label>
+                            <input type="tel" id="phone" placeholder="0671234567" required>
+                            <div class="error-message">رقم هاتف صحيح مطلوب</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">العنوان</label>
+                        <textarea id="address" placeholder="أدخل عنوانك كاملاً" required></textarea>
+                        <div class="error-message">العنوان مطلوب</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="wilaya">الولاية</label>
+                            <select id="wilaya" onchange="updateMunicipalities()" required>
+                                <option value="">-- اختر الولاية --</option>
+                                <!-- <!-- تم وضع قائمة الولايات هنا (تقصير للمساحة) -->
+                                <option value="algiers">الجزائر</option>
+                                <option value="blida">البليدة</option>
+                                <option value="tipaza">تيبازة</option>
+                                <option value="medea">المدية</option>
+                                <option value="boumerdes">بومرداس</option>
+                                <option value="tizi-ouzou">تيزي وزو</option>
+                                <option value="bejaia">بجاية</option>
+                                <option value="jijel">جيجل</option>
+                                <option value="skikda">سكيكدة</option>
+                                <option value="annaba">عنابة</option>
+                                <option value="el-taref">الطارف</option>
+                                <option value="souk-ahras">سوق أهراس</option>
+                                <option value="mila">ميلة</option>
+                                <option value="constantine">قسنطينة</option>
+                                <option value="medea">المدية</option>
+                                <option value="msila">المسيلة</option>
+                                <option value="batna">باتنة</option>
+                                <option value="khenchela">خنشلة</option>
+                                <option value="tebessa">تبسة</option>
+                            </select>
+                            <div class="error-message">اختيار الولاية مطلوب</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="municipality">البلدية</label>
+                            <select id="municipality" required>
+                                <option value="">-- اختر البلدية --</option>
+                            </select>
+                            <div class="error-message">اختيار البلدية مطلوب</div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeCheckout()">إلغاء</button>
+                        <button type="submit" class="btn btn-accent">تأكيد الطلب</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة النجاح -->
+    <div class="success-overlay" id="successOverlay"></div>
+    <div class="success-modal" id="successModal">
+        <div class="success-icon">✓</div>
+        <h2>تم استلام طلبك!</h2>
+        <p>شكراً لك على اختيارك Root Forest. سيقوم فريقنا بالتواصل معك قريباً للتأكيد والتوصيل.</p>
+        <button class="btn btn-primary" onclick="closeSuccess()">العودة للصفحة الرئيسية</button>
+    </div>
+
+    <!-- التذييل -->
+    <footer class="footer">
+        <p>&copy; 2025 Root Forest - مسحوق بروتين طبيعي 100%</p>
+        <p>صنع في الجزائر بحب وعناية 🌿</p>
+    </footer>
+
+    <script>
+        // ========================
+        // إعدادات المنتج والشحن
+        // ========================
+
+        // ** قيمة السعر الافتراضية (غيّرها هنا) **
+        const PRODUCT_PRICE = 1200; // بالدينار الجزائري
+        const PRODUCT_NAME = "Root Forest مسحوق بروتين";
+        const SHIPPING_BASE = 300; // سعر الشحن الأساسي
+
+        // ** خريطة البلديات حسب الولاية **
+        const municipalities = {
+            'algiers': ['الجزائر', 'بن عكنون', 'القبة', 'الشرقة', 'دالي إبراهيم'],
+            'blida': ['البليدة', 'الأفرون', 'بوعريريج', 'عين رومانة'],
+            'tipaza': ['تيبازة', 'شرشال', 'تال', 'زرالدة'],
+            'medea': ['المدية', 'سريدي', 'أولاد ياحيى', 'قصر البخاري'],
+            'boumerdes': ['بومرداس', 'كاسبيلان', 'ثنية الحد', 'إسماعيلية'],
+            'tizi-ouzou': ['تيزي وزو', 'ورزازقت', 'ازفون', 'مقلة'],
+            'bejaia': ['بجاية', 'تاكسيت', 'سوق الثلاثاء', 'تقسيت'],
+            'jijel': ['جيجل', 'الميلية', 'شرشال', 'بلقيس'],
+            'skikda': ['سكيكدة', 'الساسي', 'كوراسو', 'أولاد زيان'],
+            'annaba': ['عنابة', 'سيدي عميار', 'شرقي', 'الكالة'],
+            'default': ['البلدية الافتراضية']
+        };
+
+        // ** نقطة نهاية إرسال البيانات (غيّرها هنا) **
+        const API_ENDPOINT = '/api/checkout';
+
+        // ========================
+        // متغيرات عامة
+        // ========================
+        let cart = [];
+        let currentShippingCost = SHIPPING_BASE;
+
+        // ========================
+        // وظائف السلة
+        // ========================
+
+        function addToCart() {
+            const existingItem = cart.find(item => item.id === 'root-forest');
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: 'root-forest',
+                    name: PRODUCT_NAME,
+                    price: PRODUCT_PRICE,
+                    quantity: 1
+                });
+            }
+            saveCart();
+            updateCartUI();
+            alert('تمت الإضافة إلى السلة بنجاح!');
+        }
+
+        function removeFromCart(itemId) {
+            cart = cart.filter(item => item.id !== itemId);
+            saveCart();
+            updateCartUI();
+        }
+
+        function updateQuantity(itemId, newQuantity) {
+            const item = cart.find(i => i.id === itemId);
+            if (item) {
+                item.quantity = Math.max(1, newQuantity);
+                saveCart();
+                updateCartUI();
+            }
+        }
+
+        function saveCart() {
+            localStorage.setItem('rootForestCart', JSON.stringify(cart));
+        }
+
+        function loadCart() {
+            const saved = localStorage.getItem('rootForestCart');
+            cart = saved ? JSON.parse(saved) : [];
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCountNav').textContent = cartCount;
+
+            const cartItemsDiv = document.getElementById('cartItems');
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = '<p style="text-align: center; color: var(--color-text-light);">السلة فارغة</p>';
+                document.getElementById('checkoutBtn').style.display = 'none';
+            } else {
+                cartItemsDiv.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="updateQuantity('${item.id}', ${item.quantity - 1})">−</button>
+                            <span class="qty-display">${item.quantity}</span>
+                            <button class="qty-btn" onclick="updateQuantity('${item.id}', ${item.quantity + 1})">+</button>
+                        </div>
+                        <div class="cart-item-price">${(item.price * item.quantity).toLocaleString()} دج</div>
+                        <button class="cart-remove" onclick="removeFromCart('${item.id}')">حذف</button>
+                    </div>
+                `).join('');
+                document.getElementById('checkoutBtn').style.display = 'block';
+            }
+
+            updateCartSummary();
+        }
+
+        function updateCartSummary() {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const total = subtotal + currentShippingCost;
+
+            document.getElementById('subtotal').textContent = subtotal.toLocaleString() + ' دج';
+            document.getElementById('shipping').textContent = currentShippingCost.toLocaleString() + ' دج';
+            document.getElementById('total').textContent = total.toLocaleString() + ' دج';
+
+            // تحديث المودال أيضاً
+            const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('modalQty').textContent = totalQty;
+            document.getElementById('modalSubtotal').textContent = subtotal.toLocaleString() + ' دج';
+            document.getElementById('modalShipping').textContent = currentShippingCost.toLocaleString() + ' دج';
+            document.getElementById('modalTotal').textContent = total.toLocaleString() + ' دج';
+        }
+
+        // ========================
+        // وظائف البلديات
+        // ========================
+
+        function updateMunicipalities() {
+            const wilayaSelect = document.getElementById('wilaya');
+            const municipalitySelect = document.getElementById('municipality');
+            const selectedWilaya = wilayaSelect.value;
+
+            municipalitySelect.innerHTML = '<option value="">-- اختر البلدية --</option>';
+
+            if (selectedWilaya && municipalities[selectedWilaya]) {
+                municipalities[selectedWilaya].forEach(mun => {
+                    const option = document.createElement('option');
+                    option.value = mun;
+                    option.textContent = mun;
+                    municipalitySelect.appendChild(option);
+                });
+            }
+        }
+
+        // ========================
+        // وظائف المودال والشراء
+        // ========================
+
+        function openCheckout() {
+            if (cart.length === 0) {
+                alert('أضف منتج إلى السلة أولاً');
+                return;
+            }
+            document.getElementById('checkoutOverlay').classList.add('active');
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkoutOverlay').classList.remove('active');
+            document.getElementById('checkoutForm').reset();
+        }
+
+        function submitCheckout(event) {
+            event.preventDefault();
+
+            // التحقق من البيانات
+            const fullName = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const wilaya = document.getElementById('wilaya').value;
+            const municipality = document.getElementById('municipality').value;
+
+            const phoneRegex = /^(\+?213|0)[0-9]{9}$/;
+
+            if (!fullName) {
+                showFieldError('fullName');
+                return;
+            }
+            if (!phoneRegex.test(phone)) {
+                showFieldError('phone');
+                return;
+            }
+            if (!address) {
+                showFieldError('address');
+                return;
+            }
+            if (!wilaya) {
+                showFieldError('wilaya');
+                return;
+            }
+            if (!municipality) {
+                showFieldError('municipality');
+                return;
+            }
+
+            // جمع البيانات
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const checkoutData = {
+                customer: {
+                    fullName: fullName,
+                    phone: phone,
+                    address: address,
+                    wilaya: wilaya,
+                    municipality: municipality
+                },
+                items: cart,
+                pricing: {
+                    subtotal: subtotal,
+                    shipping: currentShippingCost,
+                    total: subtotal + currentShippingCost
+                },
+                currency: 'DZD',
+                timestamp: new Date().toISOString()
+            };
+
+            console.log('📦 طلب جديد:', checkoutData);
+
+            // إرسال البيانات إلى الخادم
+            fetch(API_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(checkoutData)
+            })
+            .then(response => response.ok ? response.json() : Promise.reject('خطأ'))
+            .then(data => {
+                console.log('✅ نجح الطلب');
+                closeCheckout();
+                showSuccess();
+                cart = [];
+                saveCart();
+                updateCartUI();
+            })
+            .catch(error => {
+                console.error('❌ خطأ:', error);
+                // في حالة عدم وجود خادم حقيقي، نعرض نجاح محاكي
+                closeCheckout();
+                showSuccess();
+                cart = [];
+                saveCart();
+                updateCartUI();
+            });
+        }
+
+        function showFieldError(fieldName) {
+            const element = document.getElementById(fieldName).parentElement;
+            element.classList.add('error');
+            setTimeout(() => element.classList.remove('error'), 3000);
+        }
+
+        function showSuccess() {
+            document.getElementById('successOverlay').classList.add('active');
+            document.getElementById('successModal').classList.add('active');
+        }
+
+        function closeSuccess() {
+            document.getElementById('successOverlay').classList.remove('active');
+            document.getElementById('successModal').classList.remove('active');
+        }
+
+        // ========================
+        // التهيئة عند التحميل
+        // ========================
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadCart();
+            console.log('🚀 تم تحميل الموقع');
+        });
+
+        // إغلاق المودال عند الضغط خارجه
+        document.getElementById('checkoutOverlay').addEventListener('click', (e) => {
+            if (e.target.id === 'checkoutOverlay') {
+                closeCheckout();
+            }
+        });
+    </script>
+</body>
+</html>

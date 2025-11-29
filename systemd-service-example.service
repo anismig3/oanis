@@ -1,0 +1,88 @@
+# ملف Systemd Service لخادم API بـ Node.js
+# ضع هذا الملف في: /etc/systemd/system/root-forest-api.service
+# ثم استخدم الأوامر أدناه:
+#
+# sudo systemctl daemon-reload
+# sudo systemctl enable root-forest-api
+# sudo systemctl start root-forest-api
+# sudo systemctl status root-forest-api
+
+[Unit]
+Description=Root Forest API Service - Node.js Server
+Documentation=file:///var/www/root-forest-api/README.md
+After=network.target
+Wants=network-online.target
+
+[Service]
+# نوع الخدمة
+Type=simple
+Restart=always
+RestartSec=10
+
+# المستخدم الذي تعمل عليه الخدمة
+User=www-data
+Group=www-data
+
+# مجلد العمل
+WorkingDirectory=/var/www/root-forest-api
+
+# الأمر الذي يتم تشغيله
+ExecStart=/usr/bin/node /var/www/root-forest-api/server.js
+
+# متغيرات البيئة (اختياري)
+Environment="NODE_ENV=production"
+Environment="PORT=3000"
+
+# الملفات والحدود
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=root-forest-api
+
+# الحد الأدنى من الملفات المفتوحة
+LimitNOFILE=65535
+
+# التأخير قبل الإيقاف
+TimeoutStopSec=30
+
+# الحد الأقصى للذاكرة (اختياري)
+MemoryMax=512M
+
+[Install]
+WantedBy=multi-user.target
+
+# ملاحظات:
+# 
+# 1. تأكد من تثبيت Node.js على السيرفر:
+#    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+#    sudo apt-get install -y nodejs
+#
+# 2. أنشئ مجلد الخادم:
+#    sudo mkdir -p /var/www/root-forest-api
+#    sudo chown www-data:www-data /var/www/root-forest-api
+#
+# 3. ضع ملف server.js في /var/www/root-forest-api/
+#
+# 4. ثبّت المتطلبات:
+#    cd /var/www/root-forest-api
+#    npm install express cors
+#
+# 5. فعّل الخدمة:
+#    sudo systemctl daemon-reload
+#    sudo systemctl enable root-forest-api
+#    sudo systemctl start root-forest-api
+#
+# 6. للتحقق من الحالة:
+#    sudo systemctl status root-forest-api
+#
+# 7. لعرض السجلات:
+#    sudo journalctl -u root-forest-api -f
+#
+# 8. لإيقاف الخدمة:
+#    sudo systemctl stop root-forest-api
+#
+# 9. لإعادة تشغيل الخدمة:
+#    sudo systemctl restart root-forest-api
+#
+# 10. إذا عدّلت هذا الملف، أعد تحميل الخدمة:
+#     sudo systemctl daemon-reload
+#     sudo systemctl restart root-forest-api

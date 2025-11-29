@@ -1,0 +1,133 @@
+{
+  "comment": "مثال على بيانات الطلب التي يرسلها الموقع إلى /api/checkout",
+  "example_payload": {
+    "customer": {
+      "fullName": "محمد علي أحمد",
+      "email": "muhammad.ali@email.com",
+      "address": "شارع النيل رقم 123، حي بن عكنون",
+      "wilaya": "algiers"
+    },
+    "items": [
+      {
+        "id": "root-forest",
+        "name": "Root Forest مسحوق بروتين",
+        "price": 1200,
+        "quantity": 2
+      }
+    ],
+    "pricing": {
+      "subtotal": 2400,
+      "shipping": 500,
+      "total": 2900
+    },
+    "currency": "DZD",
+    "timestamp": "2025-11-28T10:30:45.123Z"
+  },
+  "description": {
+    "customer": {
+      "fullName": "الاسم الكامل للعميل",
+      "email": "البريد الإلكتروني للعميل",
+      "address": "العنوان كاملاً",
+      "wilaya": "رمز الولاية (code)"
+    },
+    "items": "مصفوفة بالمنتجات المطلوبة (حالياً منتج واحد فقط)",
+    "pricing": {
+      "subtotal": "المجموع قبل الشحن",
+      "shipping": "سعر الشحن بناءً على الولاية",
+      "total": "الإجمالي النهائي"
+    },
+    "currency": "العملة (دج = DZD)",
+    "timestamp": "توقيت الطلب (ISO 8601)"
+  },
+  "wilaya_codes": {
+    "adrar": "أدرار",
+    "chlef": "الشلف",
+    "medea": "المدية",
+    "laghouat": "الأغواط",
+    "oum-el-bouaghi": "أم البواقي",
+    "batna": "باتنة",
+    "annaba": "عنابة",
+    "tamanrasset": "تمنراست",
+    "tebessa": "تبسة",
+    "tlemcen": "تلمسان",
+    "tiaret": "تيارت",
+    "tizi-ouzou": "تيزي وزو",
+    "algiers": "الجزائر",
+    "djelfa": "الجلفة",
+    "jijel": "جيجل",
+    "sétif": "سطيف",
+    "saïda": "سعيدة",
+    "skikda": "سكيكدة",
+    "sidi-bel-abbès": "سيدي بلعباس",
+    "béjaïa": "بجاية",
+    "bechar": "بشار",
+    "blida": "البليدة",
+    "bouira": "البويرة",
+    "tamanghasset": "تمنغست",
+    "tébessa": "تبسة",
+    "tlimcen": "تلمسان",
+    "tissemsilt": "تسمسيلت",
+    "el-oued": "الوادي",
+    "khenchela": "خنشلة",
+    "souk-ahras": "سوق أهراس",
+    "msila": "المسيلة",
+    "mila": "ميلة",
+    "ain-defla": "عين الدفلى",
+    "naama": "النعامة",
+    "ain-temouchent": "عين تموشنت",
+    "ghardaia": "غرداية",
+    "relizane": "غليزان"
+  },
+  "shipping_costs": {
+    "algiers": 500,
+    "adrar": 1200,
+    "chlef": 800,
+    "medea": 700,
+    "laghouat": 1000,
+    "oum-el-bouaghi": 900,
+    "batna": 950,
+    "annaba": 1100,
+    "tamanrasset": 1500,
+    "tebessa": 1050,
+    "tlemcen": 850,
+    "tiaret": 800,
+    "tizi-ouzou": 650,
+    "djelfa": 900,
+    "jijel": 800,
+    "sétif": 850,
+    "saïda": 900,
+    "skikda": 900,
+    "sidi-bel-abbès": 950,
+    "béjaïa": 750,
+    "bechar": 1300,
+    "blida": 600,
+    "bouira": 700,
+    "tamanghasset": 1600,
+    "tissemsilt": 850,
+    "el-oued": 1200,
+    "khenchela": 1000,
+    "souk-ahras": 950,
+    "msila": 850,
+    "mila": 900,
+    "ain-defla": 650,
+    "naama": 1100,
+    "ain-temouchent": 900,
+    "ghardaia": 1250,
+    "relizane": 800
+  },
+  "expected_response_format": {
+    "success": true,
+    "orderId": "ORD-1732782645000",
+    "message": "تم استلام طلبك بنجاح",
+    "timestamp": "2025-11-28T10:30:45.123Z"
+  },
+  "notes": [
+    "جميع البيانات مرسلة باللغة العربية",
+    "العملة دج (دينار جزائري) = DZD",
+    "السعر الافتراضي للمنتج = 1200 دج",
+    "يمكن تعديل أسعار الشحن من جدول SHIPPING_COSTS في الكود",
+    "Timestamp بصيغة ISO 8601 (يتم إنشاؤه من طرف العميل)",
+    "البريد الإلكتروني يجب أن يكون صحيحاً (validation على الطرف الأمامي)",
+    "جميع الحقول مطلوبة (fullName, email, address, wilaya)"
+  ]
+}

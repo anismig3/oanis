@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار Root Forest</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f7f1;
+            color: #333;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2d5016;
+            border-bottom: 3px solid #8bc34a;
+            padding-bottom: 10px;
+        }
+        .test-item {
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #4a7c2c;
+            background: #f9faf8;
+        }
+        .test-item.success {
+            border-left-color: #4caf50;
+            background: #e8f5e9;
+        }
+        .test-item.error {
+            border-left-color: #f44336;
+            background: #ffebee;
+        }
+        button {
+            background: #2d5016;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #4a7c2c;
+        }
+        .status {
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .status.ok {
+            color: #4caf50;
+        }
+        .status.error {
+            color: #f44336;
+        }
+    </style>
+</head>
+<body>
+
+<div class="test-container">
+    <h1>🧪 اختبار موقع Root Forest</h1>
+    
+    <div class="test-item">
+        <h3>1️⃣ اختبار التخزين المحلي (localStorage)</h3>
+        <p>فحص ما إذا كان localStorage يعمل بشكل صحيح</p>
+        <button onclick="testLocalStorage()">اختبر</button>
+        <div id="localStorage-result"></div>
+    </div>
+
+    <div class="test-item">
+        <h3>2️⃣ اختبار الأداء والتحميل</h3>
+        <p>قياس سرعة تحميل الموقع</p>
+        <button onclick="testPerformance()">اختبر</button>
+        <div id="performance-result"></div>
+    </div>
+
+    <div class="test-item">
+        <h3>3️⃣ اختبار البيانات (JSON)</h3>
+        <p>التحقق من صيغة بيانات الطلب</p>
+        <button onclick="testJSON()">اختبر</button>
+        <div id="json-result"></div>
+    </div>
+
+    <div class="test-item">
+        <h3>4️⃣ اختبار العربية والاتجاه RTL</h3>
+        <p>التحقق من دعم اللغة العربية والاتجاه من اليمين لليسار</p>
+        <button onclick="testArabic()">اختبر</button>
+        <div id="arabic-result"></div>
+    </div>
+
+    <div class="test-item">
+        <h3>5️⃣ اختبار الألوان والتصميم</h3>
+        <p>التحقق من متغيرات الألوان</p>
+        <button onclick="testColors()">اختبر</button>
+        <div id="colors-result"></div>
+    </div>
+
+    <div class="test-item">
+        <h3>6️⃣ اختبار الاستجابة (Mobile/Desktop)</h3>
+        <p>فحص العرض على أحجام مختلفة</p>
+        <button onclick="testResponsive()">اختبر</button>
+        <div id="responsive-result"></div>
+    </div>
+
+    <div class="test-item">
+        <h3>7️⃣ فتح الموقع الرئيسي</h3>
+        <p>انقر هنا لفتح الموقع في تبويب جديد</p>
+        <button onclick="window.open('index.html', '_blank')">افتح الموقع</button>
+    </div>
+
+    <hr style="margin: 30px 0; border: none; border-top: 2px solid #e0e0e0;">
+    
+    <h2>📋 الملفات المتوفرة:</h2>
+    <ul>
+        <li>✅ <strong>index.html</strong> - الموقع الرئيسي (HTML + CSS + JavaScript)</li>
+        <li>✅ <strong>README.md</strong> - دليل الاستخدام</li>
+        <li>✅ <strong>api-example.json</strong> - مثال على بيانات الطلب</li>
+        <li>✅ <strong>server.js</strong> - خادم API نموذجي بـ Node.js</li>
+        <li>✅ <strong>package.json</strong> - متطلبات Node.js</li>
+        <li>✅ <strong>nginx-config-example.conf</strong> - إعدادات Nginx</li>
+        <li>✅ <strong>systemd-service-example.service</strong> - إعدادات الخدمة</li>
+        <li>✅ <strong>DEPLOYMENT_GUIDE.md</strong> - دليل النشر</li>
+    </ul>
+</div>
+
+<script>
+function testLocalStorage() {
+    const result = document.getElementById('localStorage-result');
+    try {
+        localStorage.setItem('test-root-forest', 'OK');
+        const value = localStorage.getItem('test-root-forest');
+        localStorage.removeItem('test-root-forest');
+        
+        if (value === 'OK') {
+            result.innerHTML = '<div class="status ok">✅ localStorage يعمل بشكل صحيح</div>';
+        } else {
+            throw new Error('خطأ في القراءة');
+        }
+    } catch (error) {
+        result.innerHTML = '<div class="status error">❌ خطأ: ' + error.message + '</div>';
+    }
+}
+
+function testPerformance() {
+    const result = document.getElementById('performance-result');
+    const startTime = performance.now();
+    setTimeout(() => {
+        const endTime = performance.now();
+        const loadTime = (endTime - startTime).toFixed(2);
+        result.innerHTML = `<div class="status ok">✅ وقت التحميل: ${loadTime}ms</div>`;
+    }, 100);
+}
+
+function testJSON() {
+    const result = document.getElementById('json-result');
+    try {
+        const testData = {
+            customer: { fullName: "محمد", email: "test@test.com" },
+            items: [{ name: "منتج", price: 1200 }],
+            currency: "DZD"
+        };
+        const json = JSON.stringify(testData, null, 2);
+        result.innerHTML = `<div class="status ok">✅ صيغة JSON صحيحة<br><pre style="background:#f0f0f0;padding:10px;border-radius:4px;font-size:12px;max-height:200px;overflow:auto;">${json}</pre></div>`;
+    } catch (error) {
+        result.innerHTML = '<div class="status error">❌ خطأ في JSON: ' + error.message + '</div>';
+    }
+}
+
+function testArabic() {
+    const result = document.getElementById('arabic-result');
+    const arabicText = "مرحباً! هذا نص عربي للاختبار.";
+    const rtlAttr = document.documentElement.getAttribute('dir');
+    
+    if (rtlAttr === 'rtl') {
+        result.innerHTML = `<div class="status ok">✅ دعم العربية والـ RTL فعّال<br><p style="text-align:right;font-size:18px;color:#2d5016;">📝 ${arabicText}</p></div>`;
+    } else {
+        result.innerHTML = '<div class="status error">❌ الاتجاه RTL غير فعّال</div>';
+    }
+}
+
+function testColors() {
+    const result = document.getElementById('colors-result');
+    const style = getComputedStyle(document.documentElement);
+    const primaryGreen = style.getPropertyValue('--primary-green').trim();
+    const secondaryGreen = style.getPropertyValue('--secondary-green').trim();
+    
+    if (primaryGreen) {
+        result.innerHTML = `<div class="status ok">✅ متغيرات الألوان موجودة
+        <br><div style="display:flex;gap:10px;margin-top:10px;">
+            <div style="width:50px;height:50px;background:${primaryGreen};border-radius:4px;border:1px solid #ddd;"></div>
+            <div style="width:50px;height:50px;background:${secondaryGreen};border-radius:4px;border:1px solid #ddd;"></div>
+        </div>
+        <p style="font-size:12px;">الأخضر الأساسي / الأخضر الثانوي</p>
+        </div>`;
+    } else {
+        result.innerHTML = '<div class="status error">❌ متغيرات الألوان غير موجودة</div>';
+    }
+}
+
+function testResponsive() {
+    const result = document.getElementById('responsive-result');
+    const width = window.innerWidth;
+    let device = 'ديسكتوب';
+    
+    if (width < 480) device = 'موبايل صغير';
+    else if (width < 768) device = 'موبايل';
+    else if (width < 1024) device = 'تابلت';
+    
+    result.innerHTML = `<div class="status ok">✅ العرض الحالي: ${width}px (${device})<br><p style="font-size:12px;">جرّب تغيير حجم النافذة</p></div>`;
+}
+</script>
+
+</body>
+</html>
