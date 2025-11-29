@@ -1,0 +1,15 @@
+node_modules/
+.env
+data/orders.db
+package-lock.json
+*.log
+.DS_Store
+dist/
+build/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.env.local
+.env.*.local

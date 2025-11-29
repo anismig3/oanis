@@ -61,6 +61,7 @@
             line-height: 1.6;
             font-weight: 400;
             letter-spacing: 0.3px;
+            overflow-x: hidden;
         }
 
         a {
@@ -99,6 +100,11 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 var(--spacing-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--spacing-lg);
+        }
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -330,12 +336,77 @@
         }
 
         /* ========================
+           مجموعة الأزرار في الـ Hero
+           ======================== */
+        .hero-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            flex-wrap: wrap;
+        }
+
+        .hero-buttons .btn {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        /* ========================
            القسم الرئيسي
            ======================== */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 var(--spacing-lg);
+        }
+
+        /* ========================
+           قسم السعر والخصم
+           ======================== */
+        .price-section {
+            text-align: center;
+            margin-top: var(--spacing-lg);
+            padding: var(--spacing-lg);
+            background: linear-gradient(135deg, rgba(220, 20, 60, 0.1) 0%, rgba(139, 0, 0, 0.05) 100%);
+            border-radius: 8px;
+            border: 2px solid var(--color-accent);
+        }
+
+        .price-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .price-original {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .price-current {
+            margin-bottom: 15px;
+        }
+
+        .price-amount {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--color-accent);
+        }
+
+        .price-currency {
+            font-size: 1.5em;
+            color: var(--color-accent);
+            margin-right: 10px;
+        }
+
+        .discount-badge {
+            background: var(--color-accent);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
         }
 
         .section {
@@ -827,79 +898,556 @@
                 --spacing-2xl: 3rem;
             }
 
-            .hero-container {
-                grid-template-columns: 1fr;
-                gap: var(--spacing-lg);
+            .navbar {
+                padding: var(--spacing-sm) 0;
             }
 
-            .hero-content h1 {
-                font-size: 2rem;
-            }
-
-            .nav-links {
-                gap: var(--spacing-lg);
-            }
-
-            .specs-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .cart-item {
-                grid-template-columns: 1fr;
-                gap: var(--spacing-md);
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .modal-footer {
-                grid-template-columns: 1fr;
-            }
-
-            .success-modal {
-                padding: 2rem;
-            }
-
-            .success-icon {
-                width: 60px;
-                height: 60px;
-                font-size: 2rem;
-            }
-        }
-
-        @media (max-width: 480px) {
             .navbar-container {
-                padding: 0 var(--spacing-md);
-            }
-
-            .nav-links {
-                gap: var(--spacing-md);
+                padding: 0 var(--spacing-sm);
             }
 
             .logo {
-                font-size: 1.2rem;
+                font-size: 1.3rem;
             }
 
             .logo-icon {
-                width: 32px;
-                height: 32px;
+                width: 36px;
+                height: 36px;
+            }
+
+            .nav-links {
+                gap: var(--spacing-md);
+                font-size: 0.9rem;
+            }
+
+            .hero {
+                padding: var(--spacing-lg) 0;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+                padding: 0 var(--spacing-md);
             }
 
             .hero-content h1 {
-                font-size: 1.5rem;
+                font-size: 1.8rem;
+                line-height: 1.3;
+            }
+
+            .hero-content p {
+                font-size: 0.95rem;
+            }
+
+            .badges-container {
+                gap: var(--spacing-xs);
+                margin-bottom: var(--spacing-md);
+            }
+
+            .badge {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+
+            .hero-image {
+                max-width: 250px;
+                margin: 0 auto;
+            }
+
+            .container {
+                padding: var(--spacing-md);
             }
 
             .section-title {
                 font-size: 1.5rem;
             }
 
+            .specs-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: var(--spacing-md);
+            }
+
+            .spec-card {
+                padding: var(--spacing-md);
+            }
+
+            .spec-icon {
+                font-size: 2rem;
+            }
+
+            .cart-section {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-item {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-sm);
+                padding: var(--spacing-md);
+            }
+
+            .cart-item-info {
+                flex-direction: column;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                font-size: 16px;
+            }
+
             .modal {
                 width: 95%;
+                max-height: 90vh;
+                overflow-y: auto;
+                margin: 0 auto;
+                padding: 0;
+            }
+
+            .modal-header {
+                padding: var(--spacing-md);
+                font-size: 1.3rem;
+            }
+
+            .modal-content {
+                padding: var(--spacing-md);
+            }
+
+            .modal-footer {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+                padding: var(--spacing-md);
+            }
+
+            .summary-row {
+                padding: var(--spacing-sm) 0;
+            }
+
+            .summary-label {
+                font-size: 0.9rem;
+            }
+
+            .summary-value {
+                font-size: 0.95rem;
+            }
+
+            .btn {
+                padding: 12px var(--spacing-md);
+                font-size: 0.95rem;
+            }
+
+            .price-section {
+                margin-top: var(--spacing-md);
+                padding: var(--spacing-md);
+            }
+
+            .price-label {
+                font-size: 0.85rem;
+            }
+
+            .price-original {
+                font-size: 1rem;
+            }
+
+            .price-amount {
+                font-size: 1.8em;
+            }
+
+            .price-currency {
+                font-size: 1.3em;
+            }
+
+            .success-modal {
+                padding: 2rem;
+                width: 90%;
+                max-width: 350px;
+            }
+
+            .success-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.8rem;
+            }
+
+            .success-title {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            :root {
+                --spacing-md: 1rem;
+                --spacing-lg: 1.5rem;
+            }
+
+            .navbar {
+                padding: var(--spacing-xs) 0;
+                border-bottom: 2px solid #dc143c;
+            }
+
+            .navbar-container {
+                padding: 0 var(--spacing-sm);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .logo {
+                font-size: 1rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .logo-icon {
+                width: 28px;
+                height: 28px;
+                font-size: 1.2rem;
+            }
+
+            .nav-links {
+                gap: var(--spacing-xs);
+                font-size: 0.75rem;
+                flex-wrap: wrap;
+            }
+
+            .nav-links li {
+                white-space: nowrap;
+            }
+
+            .cart-icon {
+                position: relative;
+            }
+
+            .cart-badge {
+                font-size: 0.65rem;
+                width: 18px;
+                height: 18px;
+            }
+
+            .hero {
+                padding: var(--spacing-md) 0;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+                padding: 0 var(--spacing-sm);
+            }
+
+            .hero-content h1 {
+                font-size: 1.3rem;
+                line-height: 1.2;
+                margin-bottom: var(--spacing-sm);
+            }
+
+            .hero-content p {
+                font-size: 0.85rem;
+                margin-bottom: var(--spacing-md);
+                line-height: 1.5;
+            }
+
+            .badges-container {
+                gap: 6px;
+                margin-bottom: var(--spacing-sm);
+            }
+
+            .badge {
+                font-size: 0.7rem;
+                padding: 4px 8px;
+                display: block;
+            }
+
+            .hero-content > div:first-of-type {
+                display: flex;
+                flex-direction: column;
+                gap: var(--spacing-sm);
+            }
+
+            .btn {
+                padding: 10px var(--spacing-sm);
+                font-size: 0.85rem;
+                width: 100%;
+            }
+
+            .btn-primary {
+                width: 100%;
+            }
+
+            .btn-secondary {
+                width: 100%;
+            }
+
+            .hero-image {
+                max-width: 180px;
+                height: auto;
+                margin: 0 auto;
             }
 
             .container {
-                padding: 0 var(--spacing-md);
+                padding: var(--spacing-sm);
+            }
+
+            .section-title {
+                font-size: 1.25rem;
+                margin-bottom: var(--spacing-md);
+            }
+
+            .price-section {
+                margin-top: var(--spacing-sm);
+                padding: var(--spacing-sm);
+                border-radius: 6px;
+            }
+
+            .price-label {
+                font-size: 0.8rem;
+                margin-bottom: 8px;
+            }
+
+            .price-original {
+                font-size: 0.95rem;
+                margin-bottom: 10px;
+            }
+
+            .price-current {
+                margin-bottom: 12px;
+            }
+
+            .price-amount {
+                font-size: 1.6em;
+            }
+
+            .price-currency {
+                font-size: 1.2em;
+            }
+
+            .discount-badge {
+                font-size: 0.85rem;
+                padding: 8px;
+            }
+
+            .specs-grid {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-sm);
+            }
+
+            .spec-card {
+                padding: var(--spacing-sm);
+            }
+
+            .spec-icon {
+                font-size: 1.8rem;
+            }
+
+            .spec-label {
+                font-size: 0.8rem;
+            }
+
+            .spec-value {
+                font-size: 0.9rem;
+            }
+
+            .cart-section {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+            }
+
+            #cartItems {
+                min-height: 50px;
+            }
+
+            .cart-item {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-sm);
+                padding: var(--spacing-sm);
+            }
+
+            .order-summary {
+                padding: var(--spacing-sm);
+                border: 1px solid var(--color-border);
+            }
+
+            .modal {
+                width: 98%;
+                margin: 10px auto;
+                max-height: 95vh;
+                overflow-y: auto;
+                padding: 0;
+                border-radius: 12px;
+            }
+
+            .modal-header {
+                padding: var(--spacing-sm);
+                font-size: 1.1rem;
+            }
+
+            .modal-header h2 {
+                font-size: 1.1rem;
+            }
+
+            .modal-content {
+                padding: var(--spacing-sm);
+            }
+
+            .modal-footer {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-sm);
+                padding: var(--spacing-sm);
+                border-top: 1px solid var(--color-border);
+            }
+
+            .modal-footer .btn {
+                width: 100%;
+                padding: 10px var(--spacing-sm);
+            }
+
+            .form-group {
+                margin-bottom: var(--spacing-md);
+            }
+
+            .form-group label {
+                font-size: 0.9rem;
+                margin-bottom: 6px;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 10px var(--spacing-sm);
+                font-size: 16px;
+                border-radius: 6px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+            }
+
+            .modal-summary {
+                padding: var(--spacing-sm);
+                margin-bottom: var(--spacing-md);
+                border-radius: 8px;
+            }
+
+            .summary-row {
+                padding: var(--spacing-xs) 0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .summary-label {
+                font-size: 0.85rem;
+                font-weight: 500;
+            }
+
+            .summary-value {
+                font-size: 0.85rem;
+                font-weight: 600;
+            }
+
+            .summary-total {
+                border-top: 2px solid var(--color-accent);
+                padding-top: var(--spacing-sm);
+                margin-top: var(--spacing-sm);
+            }
+
+            .success-modal {
+                padding: 1.5rem;
+                width: 95%;
+                max-width: 280px;
+                margin: 0 auto;
+            }
+
+            .success-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.5rem;
+            }
+
+            .success-title {
+                font-size: 1.2rem;
+                margin: 1rem 0 0.5rem;
+            }
+
+            .success-message {
+                font-size: 0.85rem;
+                margin-bottom: 1rem;
+            }
+
+            .error-message {
+                font-size: 0.75rem;
+            }
+
+            .overlay {
+                z-index: 999;
+            }
+
+            .modal-overlay {
+                padding: var(--spacing-sm);
+            }
+        }
+
+        /* ========================
+           أجهزة لوحية كبيرة (Tablets)
+           ======================== */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .navbar-container {
+                max-width: 100%;
+                padding: 0 var(--spacing-lg);
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0 var(--spacing-lg);
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr 1fr;
+                gap: var(--spacing-lg);
+            }
+
+            .specs-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--spacing-md);
+            }
+
+            .form-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .modal {
+                width: 90%;
+                max-width: 500px;
+            }
+        }
+
+        /* ========================
+           الشاشات الكبيرة جداً
+           ======================== */
+        @media (min-width: 1025px) {
+            .navbar-container {
+                max-width: 1400px;
+            }
+
+            .container {
+                max-width: 1400px;
+            }
+
+            .hero-container {
+                max-width: 1400px;
+                gap: var(--spacing-2xl);
+            }
+
+            .specs-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .modal {
+                width: 600px;
             }
         }
     </style>
@@ -938,7 +1486,7 @@
                     <span class="badge">معتمد دوليًا</span>
                 </div>
 
-                <div style="display: flex; gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
+                <div class="hero-buttons">
                     <button class="btn btn-primary" onclick="addToCart()">
                         🛒 إضافة إلى السلة
                     </button>
@@ -999,14 +1547,14 @@
         </div>
 
         <!-- قسم السعر والخصم -->
-        <div style="text-align: center; margin-top: var(--spacing-lg); padding: var(--spacing-lg); background: linear-gradient(135deg, rgba(220, 20, 60, 0.1) 0%, rgba(139, 0, 0, 0.05) 100%); border-radius: var(--border-radius); border: 2px solid var(--color-accent);">
-            <p style="color: #666; font-size: 0.9em; margin-bottom: 10px;">السعر الأصلي:</p>
-            <p style="text-decoration: line-through; color: #999; font-size: 1.2em; margin-bottom: 15px;">3,500 دج</p>
-            <div style="margin-bottom: 15px;">
-                <span style="font-size: 2em; font-weight: bold; color: var(--color-accent);">3,000</span>
-                <span style="font-size: 1.5em; color: var(--color-accent); margin-right: 10px;">دج</span>
+        <div class="price-section">
+            <p class="price-label">السعر الأصلي:</p>
+            <p class="price-original">3,500 دج</p>
+            <div class="price-current">
+                <span class="price-amount">3,000</span>
+                <span class="price-currency">دج</span>
             </div>
-            <p style="background: var(--color-accent); color: white; padding: 10px; border-radius: 8px; font-weight: bold; display: inline-block;">خصم 500 دج (-14.3%)</p>
+            <p class="discount-badge">خصم 500 دج (-14.3%)</p>
         </div>
     </div>
 
