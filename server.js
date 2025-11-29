@@ -56,76 +56,83 @@ if (!fs.existsSync(dataDir)) {
     console.log(`✅ تم إنشاء مجلد البيانات: ${dataDir}`);
 }
 
-// إنشاء اتصال SQLite
-const db = new sqlite3.Database(dbPath, (err) => {
+// إنشاء اتصال SQLite مع تحسين الأداء
+const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
         console.error('❌ خطأ في الاتصال بقاعدة البيانات:', err.message);
     } else {
         console.log(`✅ تم الاتصال بقاعدة البيانات SQLite`);
         console.log(`📁 الموقع: ${dbPath}`);
+        
+        // تطبيق إعدادات الأداء بعد الاتصال
+        db.serialize(() => {
+            db.run('PRAGMA journal_mode = WAL'); // استخدام Write-Ahead Logging
+            db.run('PRAGMA synchronous = NORMAL'); // تحسين الأداء مع الأمان
+            db.run('PRAGMA cache_size = -64000'); // 64MB cache
+            db.run('PRAGMA temp_store = MEMORY'); // استخدام الذاكرة للملفات المؤقتة
+            db.run('PRAGMA foreign_keys = ON'); // تفعيل foreign keys
+            db.run('PRAGMA busy_timeout = 5000'); // انتظر 5 ثواني قبل رفع خطأ BUSY
+        });
     }
 });
-
-// تفعيل foreign keys
-db.run('PRAGMA foreign_keys = ON');
 
 // ========================
 // إنشاء الجداول
 // ========================
 
 function createTables() {
-    db.serialize(() => {
-        // جدول الطلبات
-        db.run(`
-            CREATE TABLE IF NOT EXISTS orders (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                order_id TEXT UNIQUE NOT NULL,
-                customer_name TEXT NOT NULL,
-                customer_phone TEXT NOT NULL,
-                customer_address TEXT NOT NULL,
-                customer_wilaya TEXT NOT NULL,
-                customer_municipality TEXT NOT NULL,
-                items TEXT NOT NULL,
-                subtotal REAL NOT NULL,
-                shipping_cost REAL NOT NULL,
-                total_price REAL NOT NULL,
-                currency TEXT DEFAULT 'DZD',
-                status TEXT DEFAULT 'جديد',
-                notes TEXT,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            );
-        `, (err) => {
-            if (err) {
-                console.error('❌ خطأ في إنشاء جدول orders:', err.message);
-            } else {
-                console.log('✅ جدول orders جاهز');
-            }
-        });
+    // جدول الطلبات
+    db.run(`
+        CREATE TABLE IF NOT EXISTS orders (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            order_id TEXT UNIQUE NOT NULL,
+            customer_name TEXT NOT NULL,
+            customer_phone TEXT NOT NULL,
+            customer_address TEXT NOT NULL,
+            customer_wilaya TEXT NOT NULL,
+            customer_municipality TEXT NOT NULL,
+            items TEXT NOT NULL,
+            subtotal REAL NOT NULL,
+            shipping_cost REAL NOT NULL,
+            total_price REAL NOT NULL,
+            currency TEXT DEFAULT 'DZD',
+            status TEXT DEFAULT 'جديد',
+            notes TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+    `, (err) => {
+        if (err && !err.message.includes('already exists')) {
+            console.error('❌ خطأ في إنشاء جدول orders:', err.message);
+        } else {
+            console.log('✅ جدول orders جاهز');
+        }
+    });
 
-        // جدول الإحصائيات
-        db.run(`
-            CREATE TABLE IF NOT EXISTS statistics (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                total_orders INTEGER DEFAULT 0,
-                total_revenue REAL DEFAULT 0,
-                last_order_date DATETIME,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            );
-        `, (err) => {
-            if (err) {
-                console.error('❌ خطأ في إنشاء جدول statistics:', err.message);
-            } else {
-                console.log('✅ جدول statistics جاهز');
-            }
-        });
+    // جدول الإحصائيات
+    db.run(`
+        CREATE TABLE IF NOT EXISTS statistics (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            total_orders INTEGER DEFAULT 0,
+            total_revenue REAL DEFAULT 0,
+            last_order_date DATETIME,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+    `, (err) => {
+        if (err && !err.message.includes('already exists')) {
+            console.error('❌ خطأ في إنشاء جدول statistics:', err.message);
+        } else {
+            console.log('✅ جدول statistics جاهز');
+        }
+    });
 
-        // إنشاء فهرس للبحث السريع
+    // إنشاء الفهارس بعد 1 ثانية
+    setTimeout(() => {
         db.run(`CREATE INDEX IF NOT EXISTS idx_customer_name ON orders(customer_name);`);
         db.run(`CREATE INDEX IF NOT EXISTS idx_customer_phone ON orders(customer_phone);`);
         db.run(`CREATE INDEX IF NOT EXISTS idx_wilaya ON orders(customer_wilaya);`);
         db.run(`CREATE INDEX IF NOT EXISTS idx_status ON orders(status);`);
-    });
+    }, 1000);
 }
 
 createTables();
@@ -187,7 +194,8 @@ app.post('/api/orders', async (req, res) => {
             'جديد'
         ];
 
-        db.run(query, values, function(err) {
+        // استخدام دالة الإعادة المحسّنة
+        dbRunWithRetry(query, values, function(err) {
             if (err) {
                 console.error('❌ خطأ في إضافة الطلب:', err.message);
                 return res.status(500).json({
@@ -324,7 +332,8 @@ app.patch('/api/orders/:id', (req, res) => {
         query += ' WHERE order_id = ?';
         values.push(id);
 
-        db.run(query, values, function(err) {
+        // استخدام دالة الإعادة
+        dbRunWithRetry(query, values, function(err) {
             if (err) {
                 console.error('❌ خطأ:', err.message);
                 return res.status(500).json({ error: 'خطأ في تحديث الطلب' });
@@ -355,7 +364,8 @@ app.delete('/api/orders/:id', (req, res) => {
 
         const query = 'DELETE FROM orders WHERE order_id = ?';
         
-        db.run(query, [id], function(err) {
+        // استخدام دالة الإعادة
+        dbRunWithRetry(query, [id], function(err) {
             if (err) {
                 console.error('❌ خطأ:', err.message);
                 return res.status(500).json({ error: 'خطأ في حذف الطلب' });
@@ -497,6 +507,20 @@ function updateStatistics() {
                 db.run(insertQuery, [row.total_orders, row.total_revenue]);
             }
         });
+    });
+}
+
+// دالة مساعدة لإعادة محاولة العملية عند فشلها بسبب القفل
+function dbRunWithRetry(query, params, callback, retries = 3, delay = 100) {
+    db.run(query, params, function(err) {
+        if (err && err.message.includes('SQLITE_BUSY') && retries > 0) {
+            console.warn(`⚠️ قاعدة البيانات مشغولة، إعادة محاولة... (${3 - retries + 1}/3)`);
+            setTimeout(() => {
+                dbRunWithRetry(query, params, callback, retries - 1, delay * 2);
+            }, delay);
+        } else {
+            callback.call(this, err);
+        }
     });
 }
 
