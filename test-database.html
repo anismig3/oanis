@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار قاعدة البيانات - Root Forest</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Cairo', Arial, sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            padding: 20px;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        h1 { color: #dc143c; margin-bottom: 20px; }
+        .section { background: #2a2a2a; padding: 20px; margin: 20px 0; border-radius: 8px; }
+        button { 
+            background: #dc143c; 
+            color: white; 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 16px;
+            margin: 10px 5px 10px 0;
+        }
+        button:hover { background: #8b0000; }
+        .output { 
+            background: #1a1a1a; 
+            padding: 15px; 
+            margin: 15px 0; 
+            border-radius: 5px; 
+            border-left: 3px solid #dc143c;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: monospace;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success { color: #27ae60; }
+        .error { color: #e74c3c; }
+        .info { color: #3498db; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 اختبار قاعدة البيانات - Root Forest</h1>
+
+        <!-- قسم الاختبار السريع -->
+        <div class="section">
+            <h2>📝 إرسال طلب اختبار</h2>
+            <button onclick="sendTestOrder()">📦 إرسال طلب اختبار</button>
+            <button onclick="checkCustomers()">👥 عرض جميع العملاء</button>
+            <button onclick="checkOrders()">📋 عرض جميع الطلبات</button>
+            <button onclick="checkHealth()">💚 فحص صحة الخادم</button>
+            <div class="output" id="output"></div>
+        </div>
+
+        <!-- قسم المعلومات -->
+        <div class="section">
+            <h2>ℹ️ معلومات الاتصال</h2>
+            <p>
+                <strong>الخادم:</strong> http://localhost:3000<br>
+                <strong>API Base:</strong> http://localhost:3000/api<br>
+                <strong>قاعدة البيانات:</strong> SQLite (./data/orders.db)<br>
+                <strong>العميل:</strong> فتح هذا الملف في المتصفح
+            </p>
+        </div>
+
+        <!-- قسم إحصائيات قاعدة البيانات -->
+        <div class="section">
+            <h2>📊 الإحصائيات</h2>
+            <button onclick="refreshStats()">🔄 تحديث الإحصائيات</button>
+            <div class="output" id="stats"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000/api';
+
+        function log(message, type = 'info') {
+            const output = document.getElementById('output');
+            const time = new Date().toLocaleTimeString('ar-SA');
+            const prefix = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+            output.innerHTML += `<div class="${type}">[${time}] ${prefix} ${message}</div>`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function clearOutput() {
+            document.getElementById('output').innerHTML = '';
+        }
+
+        async function sendTestOrder() {
+            clearOutput();
+            log('جاري إرسال طلب اختبار...', 'info');
+
+            const testOrder = {
+                customer: {
+                    fullName: 'أحمد محمد علي',
+                    phone: '0781234567',
+                    address: 'شارع النيل، العمارة 5، الشقة 10',
+                    wilaya: 'الجزائر',
+                    municipality: 'الجزائر الوسطى'
+                },
+                items: [
+                    { name: 'Root Forest', price: 3000, quantity: 1 }
+                ],
+                pricing: {
+                    subtotal: 3000,
+                    shipping: 200,
+                    total: 3200
+                },
+                currency: 'DZD',
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                log('جاري إرسال البيانات: ' + JSON.stringify(testOrder, null, 2), 'info');
+
+                const response = await fetch(`${API_BASE}/orders`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testOrder)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    log('✅ تم إرسال الطلب بنجاح!', 'success');
+                    log(`معرف الطلب: ${data.orderId}`, 'success');
+                    log(`الرسالة: ${data.message}`, 'success');
+                    log(`البيانات: ${JSON.stringify(data.data, null, 2)}`, 'success');
+                } else {
+                    log(`❌ خطأ: ${data.error || data.message}`, 'error');
+                    if (data.details) log(`التفاصيل: ${data.details}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ خطأ في الاتصال: ${error.message}`, 'error');
+            }
+        }
+
+        async function checkCustomers() {
+            clearOutput();
+            log('جاري جلب بيانات العملاء...', 'info');
+
+            try {
+                const response = await fetch(`${API_BASE}/stats/customers`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    const stats = data.statistics;
+                    log(`📊 الإحصائيات:`, 'success');
+                    log(`   • عدد العملاء المميزين: ${stats.total_customers}`, 'success');
+                    log(`   • إجمالي الطلبات: ${stats.total_orders}`, 'success');
+                    log(`   • إجمالي الإيرادات: ${stats.total_revenue.toLocaleString()} دج`, 'success');
+                    log(`   • أسماء العملاء: ${stats.customer_names.join(', ') || 'لا توجد'}`, 'success');
+                } else {
+                    log(`❌ خطأ: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ خطأ في الاتصال: ${error.message}`, 'error');
+            }
+        }
+
+        async function checkOrders() {
+            clearOutput();
+            log('جاري جلب الطلبات...', 'info');
+
+            try {
+                const response = await fetch(`${API_BASE}/orders?limit=10`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    log(`📋 تم العثور على ${data.total} طلب(ات):`, 'success');
+                    data.orders.forEach((order, index) => {
+                        log(`${index + 1}. ${order.order_id} - ${order.customer_name} (${order.total_price} دج)`, 'success');
+                    });
+                } else {
+                    log(`❌ خطأ: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ خطأ في الاتصال: ${error.message}`, 'error');
+            }
+        }
+
+        async function checkHealth() {
+            clearOutput();
+            log('فحص صحة الخادم...', 'info');
+
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    log(`✅ الخادم يعمل بكفاءة:`, 'success');
+                    log(`   • الحالة: ${data.status}`, 'success');
+                    log(`   • الوقت: ${new Date(data.timestamp).toLocaleString('ar-SA')}`, 'success');
+                    log(`   • وقت التشغيل: ${Math.floor(data.uptime)} ثانية`, 'success');
+                    log(`   • قاعدة البيانات: ${data.database}`, 'success');
+                } else {
+                    log(`❌ خطأ في الخادم`, 'error');
+                }
+            } catch (error) {
+                log(`❌ خطأ في الاتصال: ${error.message}`, 'error');
+            }
+        }
+
+        async function refreshStats() {
+            const statsDiv = document.getElementById('stats');
+            statsDiv.innerHTML = '<div class="info">جاري التحديث...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/stats/customers`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    const stats = data.statistics;
+                    statsDiv.innerHTML = `
+<div class="success">✅ تم التحديث في: ${new Date().toLocaleTimeString('ar-SA')}
+
+📊 الإحصائيات:
+   • عدد العملاء: ${stats.total_customers}
+   • عدد الطلبات: ${stats.total_orders}
+   • الإيرادات الكلية: ${stats.total_revenue.toLocaleString()} دج
+   
+👥 أسماء العملاء:
+${stats.customer_names.length > 0 ? stats.customer_names.map((name, i) => `   ${i + 1}. ${name}`).join('\n') : '   لا توجد بيانات بعد'}
+</div>
+                    `;
+                } else {
+                    statsDiv.innerHTML = `<div class="error">❌ خطأ: ${data.error}</div>`;
+                }
+            } catch (error) {
+                statsDiv.innerHTML = `<div class="error">❌ خطأ: ${error.message}</div>`;
+            }
+        }
+
+        // تحديث الإحصائيات تلقائياً عند تحميل الصفحة
+        window.addEventListener('load', () => {
+            log('✅ تم تحميل الصفحة بنجاح', 'success');
+            log('جاري جلب الإحصائيات...', 'info');
+            refreshStats();
+        });
+    </script>
+</body>
+</html>

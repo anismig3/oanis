@@ -156,8 +156,22 @@ app.post('/api/orders', async (req, res) => {
     try {
         const { customer, items, pricing, currency, timestamp } = req.body;
 
+        // تسجيل البيانات المستقبلة
+        console.log('📦 تم استقبال طلب جديد');
+        console.log('👤 العميل:', customer?.fullName);
+        console.log('📞 الهاتف:', customer?.phone);
+        console.log('📍 الموقع:', customer?.wilaya, '-', customer?.municipality);
+        console.log('💰 السعر:', pricing?.total);
+
         if (!customer || !items || !pricing) {
+            console.error('❌ بيانات غير كاملة - العميل:', !!customer, 'المنتجات:', !!items, 'السعر:', !!pricing);
             return res.status(400).json({ error: 'بيانات غير كاملة' });
+        }
+
+        // التحقق من البيانات المهمة
+        if (!customer.fullName || !customer.phone || !customer.wilaya || !customer.municipality) {
+            console.error('❌ بيانات العميل غير صحيحة:', customer);
+            return res.status(400).json({ error: 'بيانات العميل غير صحيحة' });
         }
 
         const orderId = `ORD-${Date.now()}`;
@@ -183,7 +197,7 @@ app.post('/api/orders', async (req, res) => {
             orderId,
             customer.fullName,
             customer.phone,
-            customer.address,
+            customer.address || 'غير محدد',
             customer.wilaya,
             customer.municipality,
             JSON.stringify(items),
@@ -194,17 +208,22 @@ app.post('/api/orders', async (req, res) => {
             'جديد'
         ];
 
+        console.log('💾 محاولة حفظ الطلب في قاعدة البيانات...');
+
         // استخدام دالة الإعادة المحسّنة
-        dbRunWithRetry(query, values, function(err) {
+        dbRunWithRetry(query, values, (err, lastID) => {
             if (err) {
                 console.error('❌ خطأ في إضافة الطلب:', err.message);
+                console.error('❌ Stack:', err.stack);
                 return res.status(500).json({
                     error: 'خطأ في حفظ الطلب',
                     details: err.message
                 });
             }
 
-            console.log(`✅ طلب جديد: ${orderId} من ${customer.fullName}`);
+            console.log(`✅ طلب جديد محفوظ: ${orderId}`);
+            console.log(`✅ معرف الصف: ${lastID}`);
+            console.log(`✅ من: ${customer.fullName}`);
 
             // تحديث الإحصائيات
             updateStatistics();
@@ -214,7 +233,7 @@ app.post('/api/orders', async (req, res) => {
                 message: '✅ تم حفظ الطلب بنجاح',
                 orderId: orderId,
                 data: {
-                    id: this.lastID,
+                    id: lastID,
                     order_id: orderId,
                     customer_name: customer.fullName,
                     total_price: pricing.total,
@@ -225,6 +244,7 @@ app.post('/api/orders', async (req, res) => {
 
     } catch (error) {
         console.error('❌ خطأ:', error.message);
+        console.error('❌ Stack:', error.stack);
         res.status(500).json({
             error: 'خطأ في حفظ الطلب',
             details: error.message
@@ -473,6 +493,41 @@ app.get('/api/health', (req, res) => {
     });
 });
 
+// عدد الطلبات والعملاء (للاختبار والمراقبة)
+app.get('/api/stats/customers', (req, res) => {
+    try {
+        const query = `
+            SELECT 
+                COUNT(DISTINCT customer_name) as total_customers,
+                COUNT(*) as total_orders,
+                COALESCE(SUM(total_price), 0) as total_revenue,
+                GROUP_CONCAT(DISTINCT customer_name, ', ') as customer_names
+            FROM orders;
+        `;
+
+        db.get(query, [], (err, row) => {
+            if (err) {
+                console.error('❌ خطأ:', err.message);
+                return res.status(500).json({ error: 'خطأ في جلب الإحصائيات' });
+            }
+
+            res.json({
+                success: true,
+                statistics: {
+                    total_customers: row.total_customers || 0,
+                    total_orders: row.total_orders || 0,
+                    total_revenue: row.total_revenue || 0,
+                    customer_names: row.customer_names ? row.customer_names.split(', ') : []
+                }
+            });
+        });
+
+    } catch (error) {
+        console.error('❌ خطأ:', error.message);
+        res.status(500).json({ error: 'خطأ في جلب الإحصائيات' });
+    }
+});
+
 // ========================
 // دوال مساعدة
 // ========================
@@ -519,7 +574,8 @@ function dbRunWithRetry(query, params, callback, retries = 3, delay = 100) {
                 dbRunWithRetry(query, params, callback, retries - 1, delay * 2);
             }, delay);
         } else {
-            callback.call(this, err);
+            // تمرير lastID كمعامل
+            callback(err, this.lastID);
         }
     });
 }
