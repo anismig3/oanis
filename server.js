@@ -68,10 +68,11 @@ const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CR
         db.serialize(() => {
             db.run('PRAGMA journal_mode = WAL'); // استخدام Write-Ahead Logging
             db.run('PRAGMA synchronous = NORMAL'); // تحسين الأداء مع الأمان
-            db.run('PRAGMA cache_size = -64000'); // 64MB cache
+            db.run('PRAGMA cache_size = -128000'); // 128MB cache
             db.run('PRAGMA temp_store = MEMORY'); // استخدام الذاكرة للملفات المؤقتة
             db.run('PRAGMA foreign_keys = ON'); // تفعيل foreign keys
-            db.run('PRAGMA busy_timeout = 5000'); // انتظر 5 ثواني قبل رفع خطأ BUSY
+            db.run('PRAGMA busy_timeout = 30000'); // انتظر 30 ثانية قبل رفع خطأ BUSY
+            db.run('PRAGMA wal_autocheckpoint = 1000'); // تقليل حجم WAL log
         });
     }
 });
@@ -588,14 +589,15 @@ function updateStatistics() {
 }
 
 // دالة مساعدة لإعادة محاولة العملية عند فشلها بسبب القفل
-function dbRunWithRetry(query, params, callback, retries = 10, delay = 50) {
+function dbRunWithRetry(query, params, callback, retries = 20, delay = 100) {
     db.run(query, params, function(err) {
         if (err && err.message.includes('SQLITE_BUSY') && retries > 0) {
-            const attempt = 11 - retries;
-            console.warn(`⚠️  قاعدة البيانات مشغولة، إعادة محاولة... (${attempt}/10)`);
+            const attempt = 21 - retries;
+            const exponentialDelay = delay * Math.pow(1.2, 21 - retries - 1);
+            console.warn(`⚠️ قاعدة البيانات مشغولة، إعادة محاولة... (${attempt}/20) - انتظار ${Math.round(exponentialDelay)}ms`);
             setTimeout(() => {
-                dbRunWithRetry(query, params, callback, retries - 1, delay * 1.5);
-            }, delay);
+                dbRunWithRetry(query, params, callback, retries - 1, delay);
+            }, exponentialDelay);
         } else {
             if (err && err.message.includes('SQLITE_BUSY')) {
                 console.error('❌ فشلت جميع المحاولات - قاعدة البيانات مقفولة');
